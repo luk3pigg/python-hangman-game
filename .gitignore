@@ -1,0 +1,21 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments (Where your libraries live)
+.venv/
+venv/
+env/
+
+# Spyder/IDE specific
+.spyderproject/
+.spyproject/
+.directory
+.vscode/
+
+# Data and Secret Files (NEVER commit passwords or huge datasets)
+.env
+*.log
+*.csv
+*.xlsx
