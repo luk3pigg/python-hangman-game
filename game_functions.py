@@ -63,7 +63,7 @@ def restart_game():
             print("\nOh, never mind. Have a nice day!")
             return False
         else:
-            restart_game_response = input("\nUnfortunately, that's an an invalid input. Please try again.\n YES: enter y\n NO: enter n\n\n").lower().strip()
+            restart_game_response = input("\nUnfortunately, that's an an invalid input. Please try again.\nYES: enter y\nNO: enter n\n\n").lower().strip()
             
 
 
