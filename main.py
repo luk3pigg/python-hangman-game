@@ -10,9 +10,13 @@ import numpy as np
 #create a game score, based on lives, time taken, and length of word.
 #tell them to take a break iftime exceeds a limit
 
+#create reusable tools e.g. get valid int logic , takes in a prompt, min value, max value. Do this for livesa nd word lengths. Very simialr logic, just different variables. 
+
 #create a word bank (start with 6 letters)
 
-word_bank = ['python', 'guitar', 'coffee', 'breeze', 'window', 'galaxy', 'jungle', 'silver', 'orchid', 'poetry']
+#scrape words from soemwhere and randomise - see a websitrw tih tables? scrabble words /wordle words? 
+
+word_bank = {5: ['queue', 'knack', 'odour', 'glyph', 'fjord', 'hyena', 'dwarf', 'stiff', 'jazzy', 'quick'], 6: ['python', 'guitar', 'coffee', 'breeze', 'window', 'galaxy', 'jungle', 'silver', 'orchid', 'poetry'], 7: ['pyjamas', 'chimney', 'whiskey', 'draught', 'defence', 'offence', 'license', 'chevron', 'acquire'], 8: ['dialysis', 'strength', 'practise', 'mountain', 'skeleton', 'flamingo', 'backpack', 'syndrome', 'keyboard', 'question'], 9: ['programme', 'neighbour', 'aluminium', 'travelled', 'authorise', 'organised', 'chocolate', 'scavenger', 'broadcast', 'average'], 10: ['specialise', 'organising', 'recognised', 'everything', 'journalism', 'playground', 'challenged', 'background', 'motivation', 'excellence']}
 
 #starting the game
 total_session_games = 0
@@ -23,7 +27,6 @@ game_start = time.time()
 first_cycle = True
 while game_active:   #loop for each session
     while first_cycle:
-        chosen_word = gf.select_word(word_bank = word_bank)
         rules = input("Would you like to know the rules before we begin?\nYES: enter y\nNO: enter n\n\n")
         while True:
             if rules == 'y':
@@ -36,18 +39,34 @@ while game_active:   #loop for each session
                 break
             else:
                 rules = input("\nUnfortunately, that's an an invalid input. Please try again.\nYES: enter y\nNO: enter n\n\n").lower().strip()
-    word_length = int(input("Please select how many letters you would like the secret word to have, between 5 and 10."))
+    
+    
     while True:
-        if 5 <= word_length <= 10:
-            break
-        else:
-            word_length = int(input("You have selected an invalid number of lives. Please select how many letters you would like the secret word to have, between 5 and 10."))
-    lives = int(input("Please select how many lives you would like, between 5 and 10."))
+        try:
+            word_length = int(input("Please select how many letters you would like the secret word to have, between 5 and 10."))
+            if 5 <= word_length <= 10:
+                break
+            else:
+                print("You have selected an invalid number of letters.")
+        except ValueError:
+            print("You have selected an invalid number of letters.")
+            
+    chosen_word = gf.select_word(word_bank = word_bank[word_length])
+    
+    
+    
     while True:
-        if 5 <= lives <= 10:
-            break
-        else:
-            lives = int(input("You have selected an invalid number of lives. Please select how many lives you would like, between 5 and 10."))
+        try:
+            lives = int(input("Please select how many lives you would like, between 5 and 10."))
+            if 5 <= lives <= 10:
+                break
+            else:
+                print("You have selected an invalid number of lives.")
+        except ValueError:
+            print("You have selected an invalid number of lives.")
+    
+    
+    
     #Initialisation
     correct_guesses = 0
     guessed_letters = []
@@ -79,7 +98,7 @@ while game_active:   #loop for each session
     
     if game_won:
         end_time = time.time()
-        time_elapsed = round(end_time - start_time, 0)
+        time_elapsed = round(end_time - start_time, -1)
         winning_times.append(time_elapsed)
         average_time = np.mean(winning_times)
         total_wins += 1
