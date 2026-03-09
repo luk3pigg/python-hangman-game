@@ -55,7 +55,7 @@ def guess_result(guessed_letters, chosen_word, display_word, letter_guess, lives
 
 def restart_game():
     '''restarts the game based on user input'''
-    restart_game_response = input("Do you want to play another game?\n YES: enter y\n NO: enter n\n\n").lower().strip()
+    restart_game_response = input("Do you want to play again?\nYES: enter y\nNO: enter n\n\n").lower().strip()
     while True:
         if restart_game_response == 'y':
             return True
