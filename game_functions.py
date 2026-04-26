@@ -1,17 +1,19 @@
 import random
 
-def start_game():
-    '''starts the game based on user input'''
-    start_game_response = input("Welcome! Are you ready to play hangman?\nYES: enter y\nNO: enter n\n\n").lower().strip()
-    while True: #loops so if input is not y or n, this question is repated
-        if start_game_response == 'y':
-            return True #loop breaks
-        elif start_game_response == 'n':
-            print("\nOh, never mind. Have a nice day!")
-            return False #loop breaks, main.py just ends 
+def ask_yes_no(prompt):
+    """
+    Asks the user a yes/no question based on the provided prompt.
+    Returns True if 'y', False if 'n'.
+    """
+    while True:
+        response = input(f"{prompt}\nYES: enter y\nNO: enter n\n\n").lower().strip()
+        if response == 'y':
+            return True
+        elif response == 'n':
+            print("\nGot it. Have a nice day!")
+            return False
         else:
-            start_game_response = input("\nUnfortunately, that's an an invalid input. Please try again.\nYES: enter y\nNO: enter n\n\n").lower().strip()
-
+            print("\nUnfortunately, that's an invalid input. Please try again.")
 
 def select_word(word_bank):
     '''Selects a word at random from the word bank'''
@@ -53,17 +55,7 @@ def guess_result(guessed_letters, chosen_word, display_word, letter_guess, lives
     return lives, correct_guesses, game_won
 
 
-def restart_game():
-    '''restarts the game based on user input'''
-    restart_game_response = input("Do you want to play again?\nYES: enter y\nNO: enter n\n\n").lower().strip()
-    while True:
-        if restart_game_response == 'y':
-            return True
-        elif restart_game_response == 'n':
-            print("\nOh, never mind. Have a nice day!")
-            return False
-        else:
-            restart_game_response = input("\nUnfortunately, that's an an invalid input. Please try again.\nYES: enter y\nNO: enter n\n\n").lower().strip()
+
             
 
 

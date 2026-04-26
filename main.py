@@ -9,7 +9,7 @@ word_bank = {5: ['queue', 'knack', 'odour', 'glyph', 'fjord', 'hyena', 'dwarf', 
 total_session_games = 0 
 total_wins = 0
 winning_times = []
-game_active = gf.start_game() #returns True if user inputs 'y'
+game_active = gf.ask_yes_no("Welcome! Are you ready to play hangman?") #returns True if user inputs 'y'
 game_start = time.time() #overall timer starts
 first_cycle = True #first cycle is different - asks for rules etc 
 while game_active:   #loop for each session
@@ -107,7 +107,7 @@ while game_active:   #loop for each session
     print(f"Total wins in this session: {total_wins}")
     print(f"Total session duration: {session_duration} seconds. Make sure you take a break soon!") # convert this into minutes, break if over 5 minutes!!
     #restart game option
-    game_active = gf.restart_game() # very similar logic to start game function tbf 
+    game_active = gf.ask_yes_no("Would you like to play again?") # very similar logic to start game function tbf 
     
 
 
