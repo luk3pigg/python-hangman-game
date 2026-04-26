@@ -2,36 +2,23 @@ import game_functions as gf
 import time
 import numpy as np
 
-#additional ideas to focus on later:
-#eventually, create word banks based on different lengths of words and ask user for input on which lenght they want
-#adjust number of lives: difficulty setting
-#adjust times/time depending on number ie 1 is time, times is 2+
-
-#create a game score, based on lives, time taken, and length of word.
-#tell them to take a break iftime exceeds a limit
-
-#create reusable tools e.g. get valid int logic , takes in a prompt, min value, max value. Do this for livesa nd word lengths. Very simialr logic, just different variables. 
-
-#create a word bank (start with 6 letters)
-
-#scrape words from soemwhere and randomise - see a websitrw tih tables? scrabble words /wordle words? 
-
 word_bank = {5: ['queue', 'knack', 'odour', 'glyph', 'fjord', 'hyena', 'dwarf', 'stiff', 'jazzy', 'quick'], 6: ['python', 'guitar', 'coffee', 'breeze', 'window', 'galaxy', 'jungle', 'silver', 'orchid', 'poetry'], 7: ['pyjamas', 'chimney', 'whiskey', 'draught', 'defence', 'offence', 'license', 'chevron', 'acquire'], 8: ['dialysis', 'strength', 'practise', 'mountain', 'skeleton', 'flamingo', 'backpack', 'syndrome', 'keyboard', 'question'], 9: ['programme', 'neighbour', 'aluminium', 'travelled', 'authorise', 'organised', 'chocolate', 'scavenger', 'broadcast', 'average'], 10: ['specialise', 'organising', 'recognised', 'everything', 'journalism', 'playground', 'challenged', 'background', 'motivation', 'excellence']}
 
-#starting the game
-total_session_games = 0
+#Initialisation of game
+#global counter stats
+total_session_games = 0 
 total_wins = 0
 winning_times = []
-game_active = gf.start_game()
-game_start = time.time()
-first_cycle = True
+game_active = gf.start_game() #returns True if user inputs 'y'
+game_start = time.time() #overall timer starts
+first_cycle = True #first cycle is different - asks for rules etc 
 while game_active:   #loop for each session
-    while first_cycle:
+    while first_cycle: #this inner loop only runs for the first cycle
         rules = input("Would you like to know the rules before we begin?\nYES: enter y\nNO: enter n\n\n")
         while True:
             if rules == 'y':
                 print("These are the rules.\nOBJECTIVE: guess the secret word by guessing the letters it contains!\nYou will choose how many lives you have, and the length of the secret word.\nIf your letter guess is in the secret word, its location/s in the secret word will be revealed!\nBut be careful: if your letter guess is not in the secret word, you will lose a life.\nYou win the game if you guess all the letters and hence the word without losing all your lives!\n\nSo, without further ado....\n\n")
-                first_cycle = False
+                first_cycle = False #first cycle message above is not repeated 
                 break
             elif rules == 'n':
                 print("Cool.")
@@ -41,17 +28,17 @@ while game_active:   #loop for each session
                 rules = input("\nUnfortunately, that's an an invalid input. Please try again.\nYES: enter y\nNO: enter n\n\n").lower().strip()
     
     
-    while True:
+    while True: #will loop around until correct input is inputted
         try:
             word_length = int(input("Please select how many letters you would like the secret word to have, between 5 and 10."))
             if 5 <= word_length <= 10:
-                break
+                break #this word_length is fine, loop exited, program continues 
             else:
                 print("You have selected an invalid number of letters.")
         except ValueError:
-            print("You have selected an invalid number of letters.")
+            print("You have selected an invalid number of letters.") # says this regardless of whether the input is not in range 5-10, or if a letter or different character is inputted
             
-    chosen_word = gf.select_word(word_bank = word_bank[word_length])
+    chosen_word = gf.select_word(word_bank = word_bank[word_length]) #accesses dictionary with key=word length and uses function in other file
     
     
     
@@ -64,25 +51,26 @@ while game_active:   #loop for each session
                 print("You have selected an invalid number of lives.")
         except ValueError:
             print("You have selected an invalid number of lives.")
+            #same logic as above but now for lives 
     
     
     
-    #Initialisation
+    #Initialisation of each individual game
     correct_guesses = 0
     guessed_letters = []
     display_word = ['_'] * len(chosen_word)
     total_guesses = 0
     game_won = False
-    start_time = time.time()
-    while lives > 0 and not game_won: #loop for each individual game
-        if total_guesses == 0:
+    start_time = time.time() #starts time for individual game
+    while lives > 0 and not game_won: #loop for each individual game. For this loop to run, both have to be true: lives >0 AND game has not been won ie correct guesses = length of word 
+        if total_guesses == 0: #messages just for the first guess e.g. game has started 
             print("\nThe timer is on!")
             print("\nThis is your first guess!")
             print(f"\nYou currently have {lives} lives.")
             print("\nThis is the secret word:")
             print(*display_word)
         else:
-            print("\n20 seconds have gone so far!")
+            print("\n20 seconds have gone so far!") #update this error
             print(f"\nThis is guess number {total_guesses + 1}.")
             print(f"\nYou currently have {lives} lives.")
             print(f"\nYou currently have {correct_guesses} correct guesses.")
@@ -91,14 +79,14 @@ while game_active:   #loop for each session
             print("\nHere's what you know so far:")
             print(*display_word)
         
-        letter_guess, total_guesses = gf.letter_validation(total_guesses=total_guesses, guessed_letters=guessed_letters)
-        lives, correct_guesses, game_won = gf.guess_result(guessed_letters, chosen_word, display_word, letter_guess=letter_guess, lives=lives, correct_guesses=correct_guesses, game_won=game_won)
+        letter_guess, total_guesses = gf.letter_validation(total_guesses=total_guesses, guessed_letters=guessed_letters) #validates letter guesses and updates relevant counters
+        lives, correct_guesses, game_won = gf.guess_result(guessed_letters, chosen_word, display_word, letter_guess=letter_guess, lives=lives, correct_guesses=correct_guesses, game_won=game_won) #updates whether the game has been won yet or not, and whether all lives have been used up yet or not - these 2 factors decide if the game has ended or not. 
     
         
     
-    if game_won:
-        end_time = time.time()
-        time_elapsed = round(end_time - start_time, -1)
+    if game_won: #only runs when correct guesses = number of letters in the word 
+        end_time = time.time() #ends the individual game time 
+        time_elapsed = round(end_time - start_time, -1) #calculates total individual game time
         winning_times.append(time_elapsed)
         average_time = np.mean(winning_times)
         total_wins += 1
@@ -109,17 +97,17 @@ while game_active:   #loop for each session
         print(f"Your average winning time is {average_time}!")
         #win percentage
         #average time taken for the wins
-    else:
+    else: #game has not been won , but game ends as lives exceeded
         print(f"Oh no! You have run out of lives! The correct word was {chosen_word}.")
         print("Better luck next time.")
     #stats
     total_session_games += 1
-    session_duration = round(time.time() - game_start, 0)
+    session_duration = round(time.time() - game_start, 0) #calculates total session duration 
     print(f"Total games you have played in this session: {total_session_games}")
     print(f"Total wins in this session: {total_wins}")
     print(f"Total session duration: {session_duration} seconds. Make sure you take a break soon!") # convert this into minutes, break if over 5 minutes!!
     #restart game option
-    game_active = gf.restart_game()
+    game_active = gf.restart_game() # very similar logic to start game function tbf 
     
 
 
