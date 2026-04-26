@@ -9,7 +9,21 @@ word_bank = {5: ['queue', 'knack', 'odour', 'glyph', 'fjord', 'hyena', 'dwarf', 
 total_session_games = 0 
 total_wins = 0
 winning_times = []
-game_active = gf.ask_yes_no("Welcome! Are you ready to play hangman?") #returns True if user inputs 'y'
+
+while True:
+    user_input = input("Welcome! Are you ready to play hangman?\nYES: enter y\nNO: enter n\n\n").lower().strip()
+    is_ready = gf.parse_yes_no(user_input)
+    
+    if is_ready is True:
+        game_active = True
+        break
+    elif is_ready is False:
+        print("\nGot it. Have a nice day!")
+        game_active = False
+        break
+    else:
+        print("\nUnfortunately, that's an invalid input. Please try again.")
+    
 game_start = time.time() #overall timer starts
 first_cycle = True #first cycle is different - asks for rules etc 
 while game_active:   #loop for each session
@@ -79,8 +93,23 @@ while game_active:   #loop for each session
             print("\nHere's what you know so far:")
             print(*display_word)
         
-        letter_guess, total_guesses = gf.letter_validation(total_guesses=total_guesses, guessed_letters=guessed_letters) #validates letter guesses and updates relevant counters
+        while True:
+            letter_guess = input("\n\n\nPlease enter a letter guess: ").lower().strip()
+            if gf.is_valid_guess(letter_guess, guessed_letters): #verifies if guess is valid (meets all 3 conditions)
+                total_guesses += 1
+                break #exits loop
+            else:
+                print("\n\n\nThat guess was invalid. Ensure the guess is a single letter that hasn't already been guessed!")
+        
+        
+        
         lives, correct_guesses, game_won = gf.guess_result(guessed_letters, chosen_word, display_word, letter_guess=letter_guess, lives=lives, correct_guesses=correct_guesses, game_won=game_won) #updates whether the game has been won yet or not, and whether all lives have been used up yet or not - these 2 factors decide if the game has ended or not. 
+        if letter_guess in chosen_word:
+            occurrences = chosen_word.count(letter_guess)
+            print("\n\n\nCorrect guess!")
+            print(f"Your guess appears in the secret word {occurrences} times!")
+        else:
+            print("\n\n\nIncorrect guess...Unlucky!")
     
         
     
@@ -106,8 +135,22 @@ while game_active:   #loop for each session
     print(f"Total games you have played in this session: {total_session_games}")
     print(f"Total wins in this session: {total_wins}")
     print(f"Total session duration: {session_duration} seconds. Make sure you take a break soon!") # convert this into minutes, break if over 5 minutes!!
-    #restart game option
-    game_active = gf.ask_yes_no("Would you like to play again?") # very similar logic to start game function tbf 
+    
+    
+    while True:
+        user_input = input("Would you like to play again?\nYES: enter y\nNO: enter n\n\n").lower().strip()
+        is_ready = gf.parse_yes_no(user_input)
+        
+        if is_ready is True:
+            game_active = True
+            break
+        elif is_ready is False:
+            print("\nGot it. Have a nice day!")
+            game_active = False
+            break
+        else:
+            print("\nUnfortunately, that's an invalid input. Please try again.")
+    
     
 
 
