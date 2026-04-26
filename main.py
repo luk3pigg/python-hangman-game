@@ -88,7 +88,7 @@ while game_active:   #loop for each session
         end_time = time.time() #ends the individual game time 
         time_elapsed = round(end_time - start_time, -1) #calculates total individual game time
         winning_times.append(time_elapsed)
-        average_time = round(statistics.mean(winning_times), 2)
+        average_time = round(statistics.mean(winning_times), 1)
         total_wins += 1
         print(f"\n\nYou won! The secret word was {chosen_word}!")
         print(f"You took {time_elapsed} seconds.")
