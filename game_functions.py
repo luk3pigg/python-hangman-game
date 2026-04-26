@@ -15,10 +15,9 @@ def ask_yes_no(prompt):
         else:
             print("\nUnfortunately, that's an invalid input. Please try again.")
 
-def select_word(word_bank):
-    '''Selects a word at random from the word bank'''
-    chosen_index = random.randint(0, len(word_bank) - 1) #uses length of list from dictionary word_bank in main.py
-    return word_bank[chosen_index]
+def select_word(word_list):
+    '''Selects a word at random from the provided list'''
+    return random.choice(word_list) #built in function to randomly select from list
 
 
 def letter_validation(total_guesses, guessed_letters):

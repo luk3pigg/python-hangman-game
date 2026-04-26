@@ -38,7 +38,7 @@ while game_active:   #loop for each session
         except ValueError:
             print("You have selected an invalid number of letters.") # says this regardless of whether the input is not in range 5-10, or if a letter or different character is inputted
             
-    chosen_word = gf.select_word(word_bank = word_bank[word_length]) #accesses dictionary with key=word length and uses function in other file
+    chosen_word = gf.select_word(word_list = word_bank[word_length]) #accesses dictionary with key=word length and uses function in other file
     
     
     
