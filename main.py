@@ -1,6 +1,6 @@
 import game_functions as gf
 import time
-import numpy as np
+import statistics
 
 word_bank = {5: ['queue', 'knack', 'odour', 'glyph', 'fjord', 'hyena', 'dwarf', 'stiff', 'jazzy', 'quick'], 6: ['python', 'guitar', 'coffee', 'breeze', 'window', 'galaxy', 'jungle', 'silver', 'orchid', 'poetry'], 7: ['pyjamas', 'chimney', 'whiskey', 'draught', 'defence', 'offence', 'license', 'chevron', 'acquire'], 8: ['dialysis', 'strength', 'practise', 'mountain', 'skeleton', 'flamingo', 'backpack', 'syndrome', 'keyboard', 'question'], 9: ['programme', 'neighbour', 'aluminium', 'travelled', 'authorise', 'organised', 'chocolate', 'scavenger', 'broadcast', 'average'], 10: ['specialise', 'organising', 'recognised', 'everything', 'journalism', 'playground', 'challenged', 'background', 'motivation', 'excellence']}
 
@@ -88,7 +88,7 @@ while game_active:   #loop for each session
         end_time = time.time() #ends the individual game time 
         time_elapsed = round(end_time - start_time, -1) #calculates total individual game time
         winning_times.append(time_elapsed)
-        average_time = np.mean(winning_times)
+        average_time = round(statistics.mean(winning_times), 2)
         total_wins += 1
         print(f"\n\nYou won! The secret word was {chosen_word}!")
         print(f"You took {time_elapsed} seconds.")
