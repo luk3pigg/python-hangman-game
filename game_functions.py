@@ -12,21 +12,6 @@ def parse_yes_no(response):
     else:
         return None
 
-def ask_yes_no(prompt):
-    """
-    Asks the user a yes/no question based on the provided prompt.
-    Returns True if 'y', False if 'n'.
-    """
-    while True:
-        response = input(f"{prompt}\nYES: enter y\nNO: enter n\n\n").lower().strip()
-        if response == 'y':
-            return True
-        elif response == 'n':
-            print("\nGot it. Have a nice day!")
-            return False
-        else:
-            print("\nUnfortunately, that's an invalid input. Please try again.")
-
 def select_word(word_list):
     '''Selects a word at random from the provided list'''
     return random.choice(word_list) #built in function to randomly select from list

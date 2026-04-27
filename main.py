@@ -10,20 +10,25 @@ total_session_games = 0
 total_wins = 0
 winning_times = []
 
-while True:
-    user_input = input("Welcome! Are you ready to play hangman?\nYES: enter y\nNO: enter n\n\n").lower().strip()
-    is_ready = gf.parse_yes_no(user_input)
-    
-    if is_ready is True:
-        game_active = True
-        break
-    elif is_ready is False:
-        print("\nGot it. Have a nice day!")
-        game_active = False
-        break
-    else:
-        print("\nUnfortunately, that's an invalid input. Please try again.")
-    
+#UI functions
+def get_yes_no_input(prompt):
+    """
+    Handles the UI loop for asking the user a yes/no question.
+    Relies on game_functions to parse the logic.
+    """
+    while True:
+        user_input = input(f"{prompt}\nYES: enter y\nNO: enter n\n\n").lower().strip()
+        is_ready = gf.parse_yes_no(user_input)
+        
+        if is_ready is True:
+            return True
+        elif is_ready is False:
+            print("\nGot it. Have a nice day!")
+            return False
+        else:
+            print("\nUnfortunately, that's an invalid input. Please try again.")
+               
+game_active = get_yes_no_input("Welcome! Are you ready to play hangman?")
 game_start = time.time() #overall timer starts
 first_cycle = True #first cycle is different - asks for rules etc 
 while game_active:   #loop for each session
@@ -135,21 +140,9 @@ while game_active:   #loop for each session
     print(f"Total games you have played in this session: {total_session_games}")
     print(f"Total wins in this session: {total_wins}")
     print(f"Total session duration: {session_duration} seconds. Make sure you take a break soon!") # convert this into minutes, break if over 5 minutes!!
+   
+    game_active = get_yes_no_input("Would you like to play again?")
     
-    
-    while True:
-        user_input = input("Would you like to play again?\nYES: enter y\nNO: enter n\n\n").lower().strip()
-        is_ready = gf.parse_yes_no(user_input)
-        
-        if is_ready is True:
-            game_active = True
-            break
-        elif is_ready is False:
-            print("\nGot it. Have a nice day!")
-            game_active = False
-            break
-        else:
-            print("\nUnfortunately, that's an invalid input. Please try again.")
     
     
 
