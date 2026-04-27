@@ -1,17 +1,5 @@
 import random
 
-def parse_yes_no(response):
-    """
-    Evaluates a yes/no string.
-    Returns True for 'y', False for 'n', and None for invalid inputs.
-    """
-    if response == 'y':
-        return True
-    elif response == 'n':
-        return False
-    else:
-        return None
-
 def select_word(word_list):
     """Selects a word at random from the provided list"""
     return random.choice(word_list) #built in function to randomly select from list

@@ -10,21 +10,20 @@ word_bank = {5: ['queue', 'knack', 'odour', 'glyph', 'fjord', 'hyena', 'dwarf', 
 
 def get_yes_no_input(prompt):
     """
-    Handles the UI loop for asking the user a yes/no question.
-    Relies on game_functions to parse the logic.
+    Handles the UI loop for asking the user a generic yes/no question.
+    Inputs the generic question, Returns True for 'y', False for 'n'.
+    
     """
     while True:
-        user_input = input(f"{prompt}\nYES: enter y\nNO: enter n\n\n").lower().strip()
-        is_ready = gf.parse_yes_no(user_input)
+        response = input(f"{prompt}\nYES: enter y\nNO: enter n\n\n").lower().strip()
         
-        if is_ready is True:
+        if response == 'y':
             return True
-        elif is_ready is False:
-            print("\nGot it. Have a nice day!")
+        elif response == 'n':
             return False
         else:
             print("\nUnfortunately, that's an invalid input. Please try again.")
-
+            
 #main game engine
 
 def main(): #master function protects global variables by transforming into local variables
@@ -36,29 +35,19 @@ def main(): #master function protects global variables by transforming into loca
     
                    
     game_active = get_yes_no_input("Welcome! Are you ready to play hangman?") #Initialisation of game
+    if not game_active: #if game_active is False because user entered 'n'...
+        print("\nGot it. Have a nice day!") #exits the game here
     game_start = time.time() #overall timer starts
     first_cycle = True #first cycle is different - asks for rules etc 
     while game_active:   #loop for each session
-        while first_cycle: #this inner loop only runs for the first cycle
-            
-        
-        rules = input("Would you like to know the rules before we begin?\nYES: enter y\nNO: enter n\n\n")
-            while True:
-                if rules == 'y':
-                    print("These are the rules.\nOBJECTIVE: guess the secret word by guessing the letters it contains!\nYou will choose how many lives you have, and the length of the secret word.\nIf your letter guess is in the secret word, its location/s in the secret word will be revealed!\nBut be careful: if your letter guess is not in the secret word, you will lose a life.\nYou win the game if you guess all the letters and hence the word without losing all your lives!\n\nSo, without further ado....\n\n")
-                    first_cycle = False #first cycle message above is not repeated 
-                    break
-                elif rules == 'n':
-                    print("Cool.")
-                    first_cycle = False
-                    break
-                else:
-                    rules = input("\nUnfortunately, that's an an invalid input. Please try again.\nYES: enter y\nNO: enter n\n\n").lower().strip()
-                    
-                    
-       rules = get_yes_no_input("Would you like to know the rules before we begin?")         
-        
-        
+        if first_cycle: #this inner loop only runs for the first cycle
+            wants_rules = get_yes_no_input("Would you like to know the rules before we begin?")
+            if wants_rules:
+                print("These are the rules.\nOBJECTIVE: guess the secret word by guessing the letters it contains!\nYou will choose how many lives you have, and the length of the secret word.\nIf your letter guess is in the secret word, its location/s in the secret word will be revealed!\nBut be careful: if your letter guess is not in the secret word, you will lose a life.\nYou win the game if you guess all the letters and hence the word without losing all your lives!\n\nSo, without further ado....\n\n")
+            else:
+                print("Cool.")
+        first_cycle = False
+                
         while True: #will loop around until correct input is inputted
             try:
                 word_length = int(input("Please select how many letters you would like the secret word to have, between 5 and 10."))
@@ -154,6 +143,8 @@ def main(): #master function protects global variables by transforming into loca
         print(f"Total session duration: {session_duration} seconds. Make sure you take a break soon!") # convert this into minutes, break if over 5 minutes!!
        
         game_active = get_yes_no_input("Would you like to play again?")
+        if not game_active: #if game_active is False because user entered 'n'...
+            print("\nGot it. Have a nice day!") #exits the game here
 
 
 #game trigger
