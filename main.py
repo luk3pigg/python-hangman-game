@@ -105,9 +105,6 @@ def main(): #master function protects global variables by transforming into loca
         lives_upper = 10
         lives = input_within_range(lower=lives_lower, upper=lives_upper, prompt=f"Please select how many lives you would like, between {lives_lower} and {lives_upper}.", subject="number of lives")
         
-        
-        
-        
         #Initialisation of each individual game
         
         #game state (individual agme stats) variables
