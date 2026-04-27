@@ -1,10 +1,10 @@
 import game_functions as gf
 import time
 import statistics
+import json
 
-#constants and settings
-
-word_bank = {5: ['queue', 'knack', 'odour', 'glyph', 'fjord', 'hyena', 'dwarf', 'stiff', 'jazzy', 'quick'], 6: ['python', 'guitar', 'coffee', 'breeze', 'window', 'galaxy', 'jungle', 'silver', 'orchid', 'poetry'], 7: ['pyjamas', 'chimney', 'whiskey', 'draught', 'defence', 'offence', 'license', 'chevron', 'acquire'], 8: ['dialysis', 'strength', 'practise', 'mountain', 'skeleton', 'flamingo', 'backpack', 'syndrome', 'keyboard', 'question'], 9: ['programme', 'neighbour', 'aluminium', 'travelled', 'authorise', 'organised', 'chocolate', 'scavenger', 'broadcast', 'average'], 10: ['specialise', 'organising', 'recognised', 'everything', 'journalism', 'playground', 'challenged', 'background', 'motivation', 'excellence']}
+with open("word_bank.json", "r") as file:
+    WORD_BANK = json.load(file) #data externalisation to avoid hard-coding word bank
 
 #UI helper functions
 
@@ -24,16 +24,16 @@ def get_yes_no_input(prompt):
         else:
             print("\nUnfortunately, that's an invalid input. Please try again.")
 
-def input_within_range(lower, upper, prompt):
+def input_within_range(lower, upper, prompt, subject):
     while True:
         try:
             user_input = int(input(prompt))
             if lower <= user_input <= upper:
                 return user_input 
             else:
-                print(f"That is not within the specified range. Please enter a number between {lower} and {upper} inclusive.")
+                print(f"That is not within the specified range for the {subject}. Please enter a number between {lower} and {upper} inclusive.")
         except ValueError:
-            print(f"That is not a valid number. Please enter a number between {lower} and {upper} inclusive.")
+            print(f"That is not a valid number. Please enter a valid {subject} between {lower} and {upper} inclusive.")
             
 #main game engine
 
@@ -62,13 +62,13 @@ def main(): #master function protects global variables by transforming into loca
                 
         word_length_lower = 5 #eventually change these to min/max of imported list - might uses pandas, wait for this first. 
         word_length_upper = 10
-        word_length_input = input_within_range(lower=word_length_lower, upper=word_length_upper, prompt=f"Please select how many letters you would like the secret word to have, between {word_length_lower} and {word_length_upper}.") 
+        word_length_input = input_within_range(lower=word_length_lower, upper=word_length_upper, prompt=f"Please select how many letters you would like the secret word to have, between {word_length_lower} and {word_length_upper}.", subject="word length") 
         
-        chosen_word = gf.select_word(word_list = word_bank[word_length_input]) #accesses dictionary with key=word length and uses function in other file
+        chosen_word = gf.select_word(word_list = WORD_BANK[str(word_length_input)]) #accesses dictionary with key=word length and uses function in other file
         
         lives_lower = 5
         lives_upper = 10
-        lives = input_within_range(lower=lives_lower, upper=lives_upper, prompt=f"Please select how many lives you would like, between {lives_lower} and {lives_upper}.")
+        lives = input_within_range(lower=lives_lower, upper=lives_upper, prompt=f"Please select how many lives you would like, between {lives_lower} and {lives_upper}.", subject="number of lives")
         
         
         
