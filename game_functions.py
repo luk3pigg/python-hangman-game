@@ -30,19 +30,19 @@ def guess_result(guessed_letters, chosen_word, display_word, letter_guess, lives
     guessed_letters.append(letter_guess)
     
     if letter_guess in chosen_word:
-        ocurrences = 0
+        occurrences = 0
         for i, letter in enumerate(chosen_word):
             if letter == letter_guess:
-                ocurrences += 1
+                occurrences += 1
                 display_word[i] = letter_guess
-        correct_guesses += ocurrences
+        correct_guesses += occurrences
         
         if correct_guesses == len(chosen_word):
             game_won = True
     else:
         lives -= 1
         
-    return lives, correct_guesses, game_won
+    return lives, correct_guesses, game_won #don't need to return lists such as guessed_letters - these update automatically unlike variables 
 
 
 

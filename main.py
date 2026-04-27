@@ -2,9 +2,14 @@ import game_functions as gf
 import time
 import statistics
 import json
+import sys
 
-with open("word_bank.json", "r") as file:
-    WORD_BANK = json.load(file) #data externalisation to avoid hard-coding word bank
+try:
+    with open("word_bank.json", "r") as file:
+        WORD_BANK = json.load(file) #data externalisation to avoid hard-coding word bank
+except FileNotFoundError:
+    print("CRITICAL ERROR: 'word_bank.json' is missing. Please ensure the file is in the same folder as this script.")
+    sys.exit() # This cleanly shuts down the program
 
 #UI helper functions
 
@@ -34,7 +39,37 @@ def input_within_range(lower, upper, prompt, subject):
                 print(f"That is not within the specified range for the {subject}. Please enter a number between {lower} and {upper} inclusive.")
         except ValueError:
             print(f"That is not a valid number. Please enter a valid {subject} between {lower} and {upper} inclusive.")
-            
+
+def print_turn_status(total_guesses, lives, display_word, correct_guesses, guessed_letters, start_time):
+    """Handles all terminal UI updates for the start of a turn."""
+    if total_guesses == 0: #these messages only shwo up for the very first go
+        print("\nThe timer is on!")
+        print("\nThis is your first guess!")
+        print(f"\nYou currently have {lives} lives.")
+        print("\nThis is the secret word:")
+        print(*display_word)
+    else:
+        elapsed_time = int(time.time() - start_time)
+        print(f"\n{elapsed_time} seconds have gone so far!") 
+        print(f"\nThis is guess number {total_guesses + 1}.")
+        print(f"\nYou currently have {lives} lives.")
+        print(f"\nYou currently have {correct_guesses} correct guesses.")
+        print("\nYou have guessed the following letters:")
+        print(*guessed_letters)
+        print("\nHere's what you know so far:")
+        print(*display_word)            
+   
+def get_letter_guess(guessed_letters):
+    """Prompts the user for a valid, single letter that hasn't been guessed yet."""
+    while True:
+        letter_guess = input("\n\n\nPlease enter a letter guess: ").lower().strip()
+    
+        # We still rely on the engine for the logic!
+        if gf.is_valid_guess(letter_guess, guessed_letters): 
+            return letter_guess 
+        else:
+            print("\n\n\nThat guess was invalid. Ensure the guess is a single letter that hasn't already been guessed!")
+         
 #main game engine
 
 def main(): #master function protects global variables by transforming into local variables
@@ -73,39 +108,40 @@ def main(): #master function protects global variables by transforming into loca
         
         
         
-        #Initialisation of each individual game - 'individual game' stats, not overall session
+        #Initialisation of each individual game
+        
+        #game state (individual agme stats) variables
         correct_guesses = 0
         guessed_letters = []
         display_word = ['_'] * len(chosen_word)
         total_guesses = 0
         game_won = False
         start_time = time.time() #starts time for individual game
+    
+        
+    
+    
+        
         while lives > 0 and not game_won: #loop for each individual game. For this loop to run, both have to be true: lives >0 AND game has not been won ie correct guesses = length of word 
-            if total_guesses == 0: #messages just for the first guess e.g. game has started 
-                print("\nThe timer is on!")
-                print("\nThis is your first guess!")
-                print(f"\nYou currently have {lives} lives.")
-                print("\nThis is the secret word:")
-                print(*display_word)
-            else:
-                print("\n20 seconds have gone so far!") #update this error
-                print(f"\nThis is guess number {total_guesses + 1}.")
-                print(f"\nYou currently have {lives} lives.")
-                print(f"\nYou currently have {correct_guesses} correct guesses.")
-                print("\nYou have guessed the following letters:")
-                print(*guessed_letters)
-                print("\nHere's what you know so far:")
-                print(*display_word)
+            # 1. Update the UI
+            print_turn_status(
+                total_guesses=total_guesses, 
+                lives=lives, 
+                display_word=display_word, 
+                correct_guesses=correct_guesses, 
+                guessed_letters=guessed_letters, 
+                start_time=start_time
+            )
             
-            while True:
-                letter_guess = input("\n\n\nPlease enter a letter guess: ").lower().strip()
-                if gf.is_valid_guess(letter_guess, guessed_letters): #verifies if guess is valid (meets all 3 conditions)
-                    total_guesses += 1
-                    break #exits loop
-                else:
-                    print("\n\n\nThat guess was invalid. Ensure the guess is a single letter that hasn't already been guessed!")
+        # 2. Ask the user for their letter guess
             
-            
+            letter_guess = get_letter_guess(guessed_letters)
+        
+        # 3. Update turn counter
+        
+            total_guesses += 1
+                    
+        # 4. Pass the guess into gf.guess_result() to update the state   
             
             lives, correct_guesses, game_won = gf.guess_result(guessed_letters, chosen_word, display_word, letter_guess=letter_guess, lives=lives, correct_guesses=correct_guesses, game_won=game_won) #updates whether the game has been won yet or not, and whether all lives have been used up yet or not - these 2 factors decide if the game has ended or not. 
             if letter_guess in chosen_word:
@@ -113,13 +149,13 @@ def main(): #master function protects global variables by transforming into loca
                 print("\n\n\nCorrect guess!")
                 print(f"Your guess appears in the secret word {occurrences} times!")
             else:
-                print("\n\n\nIncorrect guess...Unlucky!")
+                print("\n\n\nIncorrect guess...Unlucky!") #these print statements remain in UI, all logic goes into game_functions.py 
         
-            
+        #end game  
         
         if game_won: #only runs when correct guesses = number of letters in the word 
             end_time = time.time() #ends the individual game time 
-            time_elapsed = round(end_time - start_time, -1) #calculates total individual game time
+            time_elapsed = round(end_time - start_time, 2) #calculates total individual game time
             winning_times.append(time_elapsed)
             average_time = round(statistics.mean(winning_times), 2)
             total_wins += 1
@@ -127,18 +163,31 @@ def main(): #master function protects global variables by transforming into loca
             print(f"You took {time_elapsed} seconds.")
             if time_elapsed == min(winning_times) and len(winning_times) > 1:
                 print("WOW! That's your fastest winning time yet!")
-            print(f"Your average winning time is {average_time}!")
+            print(f"Your average winning time is {average_time} seconds!")
             #win percentage
             #average time taken for the wins
         else: #game has not been won , but game ends as lives exceeded
             print(f"Oh no! You have run out of lives! The correct word was {chosen_word}.")
             print("Better luck next time.")
-        #stats
+        #session stats
+        # --- SESSION STATS ---
         total_session_games += 1
-        session_duration = round(time.time() - game_start, 0) #calculates total session duration 
-        print(f"Total games you have played in this session: {total_session_games}")
-        print(f"Total wins in this session: {total_wins}")
-        print(f"Total session duration: {session_duration} seconds. Make sure you take a break soon!") # convert this into minutes, break if over 5 minutes!!
+        
+        # 1. Calculate Win Percentage
+        win_percentage = round((total_wins / total_session_games) * 100, 1)
+        
+        # 2. Calculate Minutes and Seconds
+        session_duration_total_seconds = int(time.time() - game_start) 
+        minutes = session_duration_total_seconds // 60
+        seconds = session_duration_total_seconds % 60
+        
+        print(f"\nTotal games you have played in this session: {total_session_games}")
+        print(f"Total wins in this session: {total_wins} ({win_percentage} % win rate)")
+        print(f"Total session duration: {minutes} minutes, {seconds} seconds.") 
+        
+        # 3. The 5-Minute Break Warning
+        if minutes >= 5:
+            print("You have been playing for over 5 minutes. Make sure you take a break soon!")
        
         game_active = get_yes_no_input("Would you like to play again?")
         if not game_active: #if game_active is False because user entered 'n'...
