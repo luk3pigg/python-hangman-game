@@ -23,6 +23,17 @@ def get_yes_no_input(prompt):
             return False
         else:
             print("\nUnfortunately, that's an invalid input. Please try again.")
+
+def input_within_range(lower, upper, prompt):
+    while True:
+        try:
+            user_input = int(input(prompt))
+            if lower <= user_input <= upper:
+                return user_input 
+            else:
+                print(f"That is not within the specified range. Please enter a number between {lower} and {upper} inclusive.")
+        except ValueError:
+            print(f"That is not a valid number. Please enter a number between {lower} and {upper} inclusive.")
             
 #main game engine
 
@@ -49,30 +60,16 @@ def main(): #master function protects global variables by transforming into loca
                 print("Cool.")
             first_cycle = False # indented exactly here: first time game loads, it sees this, and set to False forver after. This is never seen again 
                 
-        while True: #will loop around until correct input is inputted
-            try:
-                word_length = int(input("Please select how many letters you would like the secret word to have, between 5 and 10."))
-                if 5 <= word_length <= 10:
-                    break #this word_length is fine, loop exited, program continues 
-                else:
-                    print("You have selected an invalid number of letters.")
-            except ValueError:
-                print("You have selected an invalid number of letters.") # says this regardless of whether the input is not in range 5-10, or if a letter or different character is inputted
-                
-        chosen_word = gf.select_word(word_list = word_bank[word_length]) #accesses dictionary with key=word length and uses function in other file
+        word_length_lower = 5 #eventually change these to min/max of imported list - might uses pandas, wait for this first. 
+        word_length_upper = 10
+        word_length_input = input_within_range(lower=word_length_lower, upper=word_length_upper, prompt=f"Please select how many letters you would like the secret word to have, between {word_length_lower} and {word_length_upper}.") 
         
+        chosen_word = gf.select_word(word_list = word_bank[word_length_input]) #accesses dictionary with key=word length and uses function in other file
         
+        lives_lower = 5
+        lives_upper = 10
+        lives = input_within_range(lower=lives_lower, upper=lives_upper, prompt=f"Please select how many lives you would like, between {lives_lower} and {lives_upper}.")
         
-        while True:
-            try:
-                lives = int(input("Please select how many lives you would like, between 5 and 10."))
-                if 5 <= lives <= 10:
-                    break
-                else:
-                    print("You have selected an invalid number of lives.")
-            except ValueError:
-                print("You have selected an invalid number of lives.")
-                #same logic as above but now for lives 
         
         
         
