@@ -27,7 +27,7 @@ def get_yes_no_input(prompt):
 #main game engine
 
 def main(): #master function protects global variables by transforming into local variables
-    #global counter stats
+    #global 'overall session' stats
     total_session_games = 0 
     total_wins = 0
     winning_times = []
@@ -37,6 +37,7 @@ def main(): #master function protects global variables by transforming into loca
     game_active = get_yes_no_input("Welcome! Are you ready to play hangman?") #Initialisation of game
     if not game_active: #if game_active is False because user entered 'n'...
         print("\nGot it. Have a nice day!") #exits the game here
+        return #guard clause: prevents the next 2 lines from ever being run (unneccesary background work). However without this 'return', code would still work due to while game_active loop
     game_start = time.time() #overall timer starts
     first_cycle = True #first cycle is different - asks for rules etc 
     while game_active:   #loop for each session
@@ -46,7 +47,7 @@ def main(): #master function protects global variables by transforming into loca
                 print("These are the rules.\nOBJECTIVE: guess the secret word by guessing the letters it contains!\nYou will choose how many lives you have, and the length of the secret word.\nIf your letter guess is in the secret word, its location/s in the secret word will be revealed!\nBut be careful: if your letter guess is not in the secret word, you will lose a life.\nYou win the game if you guess all the letters and hence the word without losing all your lives!\n\nSo, without further ado....\n\n")
             else:
                 print("Cool.")
-        first_cycle = False
+            first_cycle = False # indented exactly here: first time game loads, it sees this, and set to False forver after. This is never seen again 
                 
         while True: #will loop around until correct input is inputted
             try:
@@ -75,7 +76,7 @@ def main(): #master function protects global variables by transforming into loca
         
         
         
-        #Initialisation of each individual game
+        #Initialisation of each individual game - 'individual game' stats, not overall session
         correct_guesses = 0
         guessed_letters = []
         display_word = ['_'] * len(chosen_word)
