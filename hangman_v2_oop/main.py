@@ -3,15 +3,23 @@ import time
 import statistics
 import json
 import sys
+import os
 
 try:
     with open("word_bank.json", "r") as file:
         WORD_BANK = json.load(file) #data externalisation to avoid hard-coding word bank
 except FileNotFoundError:
-    print("CRITICAL ERROR: 'word_bank.json' is missing. Please ensure the file is in the same folder as this script.")
+    print("[!] 'word_bank.json' is missing. Please ensure the file is in the same folder as this script.")
     sys.exit() # This cleanly shuts down the program
 
 #UI helper functions
+
+def clear_screen():
+    # Clears the terminal screen based on the OS
+    os.system('cls' if os.name == 'nt' else 'clear')
+    # Print 50 blank lines as a fallback to push old text out of view
+    # (Real terminals will just clear, IDEs will print the spaces)
+    #print("\n" * 50)
 
 def get_yes_no_input(prompt):
     """
@@ -19,16 +27,15 @@ def get_yes_no_input(prompt):
     Inputs the generic question, Returns True for 'y', False for 'n'.
     
     """
+    response = input(f"{prompt}\n(y/n) \n> ").lower().strip()
     while True:
-        response = input(f"{prompt}\nYES: enter y\nNO: enter n\n\n").lower().strip()
-        
         if response == 'y':
             return True
         elif response == 'n':
             return False
         else:
-            print("\nUnfortunately, that's an invalid input. Please try again.")
-
+            response = input("\n[!] Unfortunately, that's an invalid input. Please try again.\n(y/n) \n> ")
+ 
 def input_within_range(lower, upper, prompt, subject):
     while True:
         try:
@@ -36,9 +43,9 @@ def input_within_range(lower, upper, prompt, subject):
             if lower <= user_input <= upper:
                 return user_input 
             else:
-                print(f"That is not within the specified range for the {subject}. Please enter a number between {lower} and {upper} inclusive.")
+                prompt = (f"\nThat is not within the specified range for the {subject}. Please enter a number between {lower} and {upper} inclusive.\n> ")
         except ValueError:
-            print(f"That is not a valid number. Please enter a valid {subject} between {lower} and {upper} inclusive.")
+            prompt = (f"\nThat is not a valid number. Please enter a valid {subject} between {lower} and {upper} inclusive.\n> ")
 
 def print_turn_status(total_guesses, lives, display_word, correct_guesses, guessed_letters, start_time):
     """Handles all terminal UI updates for the start of a turn."""
@@ -71,39 +78,44 @@ def get_letter_guess(guessed_letters):
             print("\n\n\nThat guess was invalid. Ensure the guess is a single letter that hasn't already been guessed!")
          
 #main game engine
-
 def main(): #master function protects global variables by transforming into local variables
-    #global 'overall session' stats
+    #clear_screen()    
+#global 'overall session' stats
     total_session_games = 0 
     total_wins = 0
     winning_times = []
     
     
                    
-    game_active = get_yes_no_input("Welcome! Are you ready to play hangman?") #Initialisation of game
+    game_active = get_yes_no_input("\nWelcome! Are you ready to play hangman?") #Initialisation of game
+    #clear_screen()
     if not game_active: #if game_active is False because user entered 'n'...
         print("\nGot it. Have a nice day!") #exits the game here
         return #guard clause: prevents the next 2 lines from ever being run (unneccesary background work). However without this 'return', code would still work due to while game_active loop
     game_start = time.time() #overall timer starts
     first_cycle = True #first cycle is different - asks for rules etc 
     while game_active:   #loop for each session
+        clear_screen()
         if first_cycle: #this inner loop only runs for the first cycle
-            wants_rules = get_yes_no_input("Would you like to know the rules before we begin?")
+            wants_rules = get_yes_no_input("\nWould you like to know the rules before we begin?")
+            
             if wants_rules:
-                print("These are the rules.\nOBJECTIVE: guess the secret word by guessing the letters it contains!\nYou will choose how many lives you have, and the length of the secret word.\nIf your letter guess is in the secret word, its location/s in the secret word will be revealed!\nBut be careful: if your letter guess is not in the secret word, you will lose a life.\nYou win the game if you guess all the letters and hence the word without losing all your lives!\n\nSo, without further ado....\n\n")
+                #clear_screen()
+                print("\nThese are the rules:\nOBJECTIVE: guess the secret word by guessing the letters it contains!\nYou will choose how many lives you have, and the length of the secret word.\nIf your letter guess is in the secret word, its location/s in the secret word will be revealed!\nBut be careful: if your letter guess is not in the secret word, you will lose a life.\nYou win the game if you guess all the letters and hence the word without losing all your lives!\n\nSo, without further ado....")
             else:
-                print("Cool.")
+                #clear_screen()
+                print("\nCool.")
             first_cycle = False # indented exactly here: first time game loads, it sees this, and set to False forver after. This is never seen again 
                 
         word_length_lower = 5 #eventually change these to min/max of imported list - might uses pandas, wait for this first. 
         word_length_upper = 10
-        word_length_input = input_within_range(lower=word_length_lower, upper=word_length_upper, prompt=f"Please select how many letters you would like the secret word to have, between {word_length_lower} and {word_length_upper}.", subject="word length") 
+        word_length_input = input_within_range(lower=word_length_lower, upper=word_length_upper, prompt=f"\nPlease select how many letters you would like the secret word to have, between {word_length_lower} and {word_length_upper}.\n> ", subject="word length") 
         
         chosen_word = gf.select_word(word_list = WORD_BANK[str(word_length_input)]) #accesses dictionary with key=word length and uses function in other file
         
         lives_lower = 5
         lives_upper = 10
-        lives = input_within_range(lower=lives_lower, upper=lives_upper, prompt=f"Please select how many lives you would like, between {lives_lower} and {lives_upper}.", subject="number of lives")
+        lives = input_within_range(lower=lives_lower, upper=lives_upper, prompt=f"\nPlease select how many lives you would like, between {lives_lower} and {lives_upper}.\n> ", subject="number of lives")
         
         #Initialisation of each individual game
         
@@ -118,7 +130,7 @@ def main(): #master function protects global variables by transforming into loca
         
     
     
-        
+        #clear_screen()
         while lives > 0 and not game_won: #loop for each individual game. For this loop to run, both have to be true: lives >0 AND game has not been won ie correct guesses = length of word 
             # 1. Update the UI
             print_turn_status(
@@ -133,6 +145,7 @@ def main(): #master function protects global variables by transforming into loca
         # 2. Ask the user for their letter guess
             
             letter_guess = get_letter_guess(guessed_letters)
+            #clear_screen()
         
         # 3. Update turn counter
         
@@ -144,7 +157,9 @@ def main(): #master function protects global variables by transforming into loca
             if letter_guess in chosen_word:
                 occurrences = chosen_word.count(letter_guess)
                 print("\n\n\nCorrect guess!")
+                time.sleep(1.0)
                 print(f"Your guess appears in the secret word {occurrences} times!")
+                time.sleep(1.0)
             else:
                 print("\n\n\nIncorrect guess...Unlucky!") #these print statements remain in UI, all logic goes into game_functions.py 
         
@@ -192,7 +207,7 @@ def main(): #master function protects global variables by transforming into loca
 
 
 #game trigger
-    
+#clear_screen() 
 if __name__ == "__main__": #executes the game, only if directly running script
     main()
     
