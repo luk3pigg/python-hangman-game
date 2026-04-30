@@ -4,6 +4,7 @@ import statistics
 import json
 import sys
 import os
+import random
 
 try:
     with open("word_bank.json", "r") as file:
@@ -128,7 +129,7 @@ def main(): #master function protects global variables by transforming into loca
         time.sleep(0.3)
         word_length_input = input_within_range(lower=word_length_lower, upper=word_length_upper, prompt=f"\nPlease select how many letters you would like the secret word to have, between {word_length_lower} and {word_length_upper}.\n> ", subject="word length") 
         
-        chosen_word = gf.select_word(word_list = WORD_BANK[str(word_length_input)]) #accesses dictionary with key=word length and uses function in other file
+        chosen_word = random.choice(WORD_BANK[str(word_length_input)]) #accesses dictionary with key=word length and uses function in other file
         
         lives_lower = 5
         lives_upper = 10

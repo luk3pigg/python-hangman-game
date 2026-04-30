@@ -1,9 +1,3 @@
-import random
-
-def select_word(word_list):
-    """Selects a word at random from the provided list"""
-    return random.choice(word_list) #built in function to randomly select from list
-
 def is_valid_guess(guess, guessed_letters):
     """
     Validates the guess and returns a tuple: (is_valid_boolean, error_message)
