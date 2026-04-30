@@ -6,10 +6,19 @@ def select_word(word_list):
 
 def is_valid_guess(guess, guessed_letters):
     """
-    Checks if the user's guess is exactly one letter and hasn't been guessed yet.
-    Returns True if valid, False otherwise.
+    Validates the guess and returns a tuple: (is_valid_boolean, error_message)
     """
-    return len(guess) == 1 and guess.isalpha() and guess not in guessed_letters #for this to return True, all 3 conditions must be True
+    if len(guess) != 1: #falling fast: cheapest, most protective checks go at the top! Most efficient to check this first. Check with the shortest computer power requried goes first.
+        return False, "You must enter exactly one character."
+    
+    if not guess.isalpha():
+        return False, "Your guess must be a letter, no numbers or symbols."
+    
+    if guess in guessed_letters:
+        return False, "You have already guessed this letter!"
+    
+    # If it passes all checks, it's valid!
+    return True, ""
 
 def guess_result(guessed_letters, chosen_word, display_word, letter_guess, lives, correct_guesses, game_won):
     """
