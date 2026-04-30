@@ -60,6 +60,8 @@ class SessionStats:
             self.winning_times.append(time_elapsed)
             self.total_wins += 1
     def get_win_percentage(self):
+        if self.total_games == 0:
+            return 0.0 #ensures true independence of object by protecting against ZeroDivisionError even though main will never get to this stage
         win_percentage = round((self.total_wins / self.total_games) * 100, 1)
         return win_percentage
     def get_session_duration(self):
