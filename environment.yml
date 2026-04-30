@@ -1,0 +1,6 @@
+name: hangman-env
+channels:
+  - defaults
+dependencies:
+  - python=3.13.13
+prefix: C:\Users\luk3p\anaconda3\envs\hangman-env
