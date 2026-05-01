@@ -3,10 +3,11 @@ channels:
   - defaults
 dependencies:
   - python=3.13.13
+  - pytest-cov
   - pip
   - pip:
     - colorama==0.4.6
     - google_search_results==2.4.2
     - iniconfig==2.3.0
     - packaging==26.0
-    - pytest==9.0.3
+    - pytest==9.0.2
