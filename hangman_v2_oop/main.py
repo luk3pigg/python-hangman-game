@@ -60,7 +60,6 @@ def main():
 
 if __name__ == "__main__": 
     try:
-        ui.clear_screen()
         main()
     except KeyboardInterrupt:
         # This catches the Ctrl+C abort command!
