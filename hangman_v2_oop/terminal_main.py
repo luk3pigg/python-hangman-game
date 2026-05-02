@@ -3,69 +3,72 @@ import terminal_utils as ui
 import json
 import sys
 
-#define load word bank in main rather than putting in UI utils file
 def load_word_bank(filepath):
-    """Attempts to load the word bank JSON file."""
+    """
+    Attempts to load the word bank JSON file into memory.
+    
+    Args:
+        filepath (str): The relative path to the JSON data file.
+        
+    Returns:
+        dict: The parsed JSON data containing word lengths and word lists.
+    """
     try:
         with open(filepath, "r") as file:
-            return json.load(file) #data externalisation to avoid hard-coding word bank
+            return json.load(file) 
     except FileNotFoundError:
         ui.clear_screen()
-        print("[!] 'word_bank.json' is missing. Please ensure the file is in the same folder as this script.")
-        sys.exit() # This cleanly shuts down the program
+        print(f"[!] CRITICAL ERROR: '{filepath}' is missing. Please ensure the file is in the same folder as this script.")
+        sys.exit(1) 
 
-#main game engine
 def main():     
-    #load data
+    """
+    The main orchestrator for the terminal Hangman experience.
+    Delegates all complex UI logic and game maths to specialised modules.
+    """
+    # --- 1. Initialisation ---
+    filepath = "data/word_bank.json"
+    WORD_BANK = load_word_bank(filepath=filepath)
     
-    WORD_BANK = load_word_bank("data/word_bank.json")
-    
-    #init stats
     stats = SessionStats()
     
-    #greeting
+    game_active = ui.load_game(prompt="\nWelcome! Are you ready to play hangman?")
+    first_cycle = True  
     
-    game_active = ui.load_game("\nWelcome! Are you ready to play hangman?")
-    
-    first_cycle = True #first cycle is different - asks for rules etc 
-    
-    #Main session loop
-    
+    # --- 2. The Session Loop ---
     while game_active:   
         
-        #1 Print rules if required
+        #1 Game Setup
         
-        first_cycle = ui.print_rules_if_needed(first_cycle) #always set to False from here on 
+        first_cycle = ui.print_rules_if_needed(first_cycle=first_cycle) #rules only offered for first game
+        chosen_word, lives = ui.setup_game_parameters(word_bank=WORD_BANK)
         
-        #2 Setup game parameters and instantiate object
-        #eventually change word length lower upper to min/max of imported list - might uses pandas, wait for this first.
-        chosen_word, lives = ui.setup_game_parameters(WORD_BANK)
+        #2 Instantiate Game Object
         
-        #3 Instantiate game object
+        game = HangmanGame(chosen_word=chosen_word, starting_lives=lives)
         
-        game = HangmanGame(chosen_word, lives)
+        #3 Play the game
         
-        #4 Play the game
+        time_elapsed = ui.play_single_game(game=game)
         
-        time_elapsed = ui.play_single_game(game)
+        #4 Evaluate Game Outcomes
         
-        #5 Evaluate Outcomes
+        ui.print_post_game_stats(game=game, stats=stats, time_elapsed=time_elapsed)
         
-        ui.print_post_game_stats(game, stats, time_elapsed)
+        #5 Session Continuation
+        game_active = ui.load_game(prompt="\nWould you like to play again?")
         
-        #6 Play Again?
-        game_active = ui.load_game("\nWould you like to play again?")
-        
-#game trigger
+# ==========================================
+# EXECUTION
+# ==========================================
 
 if __name__ == "__main__": 
     try:
         main()
     except KeyboardInterrupt:
-        # This catches the Ctrl+C abort command!
         ui.clear_screen()
         print("\nGame aborted by user. Goodbye!\n")
-        sys.exit()
+        sys.exit(0)
     
 
 

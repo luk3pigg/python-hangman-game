@@ -3,34 +3,48 @@ import time
 import random
 import statistics
 
-
-#general UI helper functions
-
+# ==========================================
+# 1. GENERAL UI HELPER FUNCTIONS
+# ==========================================
 
 def clear_screen():
-    # Clears the terminal screen based on the OS
+    """Clears the terminal scrollback depending on the host OS."""
     os.system('cls' if os.name == 'nt' else 'clear')
     
 def get_yes_no_input(prompt):
     """
-    Handles the UI loop for asking the user a generic yes/no question.
-    Returns True for 'y', False for 'n'.
+    Prompts the user for a yes/no response and handles invalid inputs.
+    
+    Args:
+        prompt (str): The question to present to the user.
+        
+    Returns:
+        bool: True if user selects 'yes', False if 'no'.
     """
     prompt = f"{prompt}\n(y/n) \n> "
     
     while True:
-        # The Single Safety Zone
         response = input(prompt).lower().strip()
-        
         if response == 'y':
             return True
         elif response == 'n':
             return False
         else:
-            # Update the prompt for the next loop
             prompt = "\n[!] Unfortunately, that's an invalid input. Please try again.\n(y/n) \n> "
 
 def input_within_range(lower, upper, prompt, subject):
+    """
+    Forces the user to input a valid integer within a specified range.
+    
+    Args:
+        lower (int): Minimum acceptable value.
+        upper (int): Maximum acceptable value.
+        prompt (str): The initial prompt text.
+        subject (str): Contextual label for error messages (e.g., 'lives').
+        
+    Returns:
+        user_input (int): The validated user input.
+    """
     while True:
         try:
             user_input = int(input(prompt))
@@ -41,24 +55,44 @@ def input_within_range(lower, upper, prompt, subject):
         except ValueError:
             prompt = (f"\n[!] That is not a valid number. Please enter a valid {subject} between {lower} and {upper} inclusive.\n> ")
 
-
-#game setup helper functions
-
+# ==========================================
+# 2. GAME SETUP HELPER FUNCTIONS
+# ==========================================
 
 def load_game(prompt):
-    game_active = get_yes_no_input(prompt)
-    if not game_active: 
-        time.sleep(0.3)
-        print("\nGot it. Have a nice day!")
-        time.sleep(0.3)
-        return #guard clause
-    return game_active
+   """
+    Wraps the yes/no prompt to handle game exit messages.
+    
+    Args:
+        prompt (str): The question to ask the user.
+        
+    Returns:
+        bool: True if the user wants to play, False if they want to exit.
+   """
+   game_active = get_yes_no_input(prompt)
+   if not game_active: 
+       time.sleep(0.3)
+       print("\nGot it. Have a nice day!")
+       time.sleep(0.3)
+       return
+   return game_active
+   
 
 def print_rules_if_needed(first_cycle):
+    """
+    Prints the game rules if it is the user's first game of the session.
+    
+    Args:
+        first_cycle (bool): A flag indicating if this is the first loop iteration.
+        
+    Returns:
+        bool: Always returns False so the rules are never printed again in this session.
+    """
     clear_screen()
     time.sleep(0.3)
-    if first_cycle: #this function only runs for first cycle
-        if get_yes_no_input("\nWould you like to know the rules before we begin?"):
+    
+    if first_cycle: 
+        if get_yes_no_input(prompt="\nWould you like to know the rules before we begin?"):
             time.sleep(0.3)
             print("\nThese are the rules:\n\nOBJECTIVE: guess the secret word by guessing the letters it contains!\n>You will choose how many lives you have, and the length of the secret word.\n>If your letter guess is in the secret word, its location/s in the secret word will be revealed!\n>But be careful: if your letter guess is not in the secret word, you will lose a life.\n>You win the game if you guess all the letters and hence the word without losing all your lives!")
             time.sleep(0.3)
@@ -66,24 +100,42 @@ def print_rules_if_needed(first_cycle):
         else:
             time.sleep(0.3)
             print("\nOkay, if you say so... ;)")
-    return False # Returns False so first_cycle is deactivated forever. # indented exactly here: first time game loads, it sees this, and set to False forver after. This is never seen again 
+    return False 
 
 def setup_game_parameters(word_bank):
+    """
+    Prompts the user for word length and lives, then selects the word.
+    
+    Args:
+        word_bank (dict): The dictionary containing available words mapped by length.
+        
+    Returns:
+        tuple[str, int]: A tuple containing the randomly chosen word and the selected number of lives.
+    """
     time.sleep(0.3)
-    word_length = input_within_range(5, 10, "\nPlease select how many letters you would like the secret word to have, between 5 and 10.\n> ", "word length") 
+    word_length = input_within_range(lower=5, upper=10, prompt="\nPlease select how many letters you would like the secret word to have, between 5 and 10.\n> ", subject="word length") 
     chosen_word = random.choice(word_bank[str(word_length)])
     
     time.sleep(0.3)
-    lives = input_within_range(5, 10, "\nPlease select how many lives you would like, between 5 and 10.\n> ", "number of lives")
+    lives = input_within_range(lower=5, upper=10, prompt="\nPlease select how many lives you would like, between 5 and 10.\n> ", subject="number of lives")
+    
     return chosen_word, lives
 
-
-#game phase helper functions
-
+# ==========================================
+# 3. GAME PHASE HELPER FUNCTIONS
+# ==========================================
 
 def print_turn_status(game):
-    """Handles all terminal UI updates for the start of a turn."""
-    if game.total_guesses == 0: #these messages only shwo up for the very first go
+    """
+    Renders the current game state to the terminal.
+    
+    Args:
+        game (HangmanGame): The current active instance of the Hangman game.
+        
+    Returns:
+        None
+    """
+    if game.total_guesses == 0:
         print("\nThe timer is on!")
         time.sleep(0.5)
         print("\nThis is your first guess!")
@@ -108,29 +160,42 @@ def print_turn_status(game):
         print(*game.display_word)            
    
 def get_letter_guess(game):
-    """Prompts the user for a valid, single letter that hasn't been guessed yet."""
+    """
+    Prompts the user for a valid, single letter that hasn't been guessed yet.
+    
+    Args:
+        game (HangmanGame): The current active instance of the Hangman game.
+        
+    Returns:
+        str: A validated, lowercase, single-character string.
+    """
     prompt = "\nPlease enter a letter guess:\n>  "
     while True:
-        # 1. The Single Safety Zone
         letter_guess = input(prompt).lower().strip()
         
-        # 2. Run the engine ONCE and unpack the tuple into two variables
-        is_valid, error_msg = game.is_valid_guess(letter_guess)
+        is_valid, error_msg = game.is_valid_guess(guess=letter_guess)
         
-        # 3. Logic Routing
         if is_valid:
             return letter_guess 
         else:
             prompt = f"\n[!] {error_msg} Please try another guess:\n> "
             
 def play_single_game(game):
-    """Runs the while loop for a single game and returns the time elapsed."""
+    """
+    Runs the while loop for a single game and returns the time elapsed.
+    
+    Args:
+        game (HangmanGame): The initialised Hangman game object to be played.
+        
+    Returns:
+        float: The total time elapsed during the game in seconds.
+    """
     clear_screen()
     time.sleep(0.3)
     
     while game.lives > 0 and not game.game_won:
-        print_turn_status(game)
-        letter_guess = get_letter_guess(game)
+        print_turn_status(game=game)
+        letter_guess = get_letter_guess(game=game)
         is_correct, occurrences = game.evaluate_guess(letter_guess)
         
         clear_screen()
@@ -144,14 +209,26 @@ def play_single_game(game):
             print("Incorrect guess...Unlucky!") 
             time.sleep(1.0)
             
-    # Calculate and return time elapsed when loop breaks - calculates now rather than waiting for next bit which includes a time.sleep()
     return round(time.time() - game.start_time, 0)
 
 
-#post game helper functions
+# ==========================================
+# 4. POST GAME HELPER FUNCTIONS
+# ==========================================
 
 
 def print_post_game_stats(game, stats, time_elapsed):
+    """
+    Evaluates the outcome of a game, updates session stats, and prints results.
+    
+    Args:
+        game (HangmanGame): The completed game instance.
+        stats (SessionStats): The object tracking the overall session history.
+        time_elapsed (float): Total seconds the individual game took to play.
+        
+    Returns:
+        None
+    """
     clear_screen()
     time.sleep(0.3)
     
@@ -159,13 +236,16 @@ def print_post_game_stats(game, stats, time_elapsed):
     if game.game_won:
         stats.record_game(game_won=True, time_elapsed=time_elapsed)
         average_time = round(statistics.mean(stats.winning_times), 0)
+        
         print(f"You won! The secret word was {game.chosen_word}!\n")
         time.sleep(1.0)
         print("----------GAME STATISTICS----------\n")
         print(f"You took {time_elapsed} seconds.\n")
+        
         if time_elapsed == min(stats.winning_times) and len(stats.winning_times) > 1:
             time.sleep(1.0)
             print("WOW! That's your fastest winning time yet!\n")
+        
         time.sleep(1.0)
         print(f"Your average winning time is {average_time} seconds!\n")
     else:

@@ -1,12 +1,16 @@
 import subprocess
 import sys
 import os
+import time 
 
 def clear_screen():
-    # Clears the terminal screen based on the OS
+    """Clears the terminal scrollback depending on the host OS."""
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def print_menu():
+    """
+    Displays the main launcher menu with interface options.
+    """
     print("\n" + "="*40)
     print("      H A N G M A N : S U I T E     ")
     print("="*40)
@@ -18,6 +22,9 @@ def print_menu():
     print("="*40)
 
 def launch_game():
+    """
+    Runs the continuous launcher loop, handling user input and 
+    spawning subprocesses for the selected game interfaces."""
     clear_screen()
     while True:
         
@@ -41,17 +48,22 @@ def launch_game():
             elif choice == '4':
                 clear_screen()
                 print("\nThanks for playing! Goodbye.\n")
-                break
+                sys.exit(0)
                 
             else:
                 clear_screen()
                 print("\n❌ Invalid choice. Please enter 1, 2, 3, or 4.")
                 
         except KeyboardInterrupt:
-            # This catches Ctrl+C no matter which app is currently running!
-            clear_screen()
             print("\n\n🛑 Process interrupted safely. Returning to main menu...")
-            # The loop automatically restarts and shows the menu again.
+            time.sleep(1.5)
+            clear_screen()
+        
 
 if __name__ == "__main__":
-    launch_game()
+    try:
+        launch_game()
+    except KeyboardInterrupt:
+        clear_screen()
+        print("\nLauncher aborted. Goodbye!\n")
+        sys.exit(0)
