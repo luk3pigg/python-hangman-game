@@ -1,5 +1,5 @@
 from logic import HangmanGame, SessionStats
-import utils_ui as ui
+import terminal_utils as ui
 import json
 import sys
 
@@ -18,7 +18,7 @@ def load_word_bank(filepath):
 def main():     
     #load data
     
-    WORD_BANK = load_word_bank("word_bank.json")
+    WORD_BANK = load_word_bank("data/word_bank.json")
     
     #init stats
     stats = SessionStats()

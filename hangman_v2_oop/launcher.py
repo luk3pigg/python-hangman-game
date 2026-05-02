@@ -28,7 +28,7 @@ def launch_game():
             if choice == '1':
                 clear_screen()
                 print("\n🚀 Launching Terminal Mode...\n")
-                subprocess.run([sys.executable, "main.py"])
+                subprocess.run([sys.executable, "terminal_main.py"])
                 
             elif choice == '2':
                 print("\n🚀 Launching Desktop GUI...\n")
