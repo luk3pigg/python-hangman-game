@@ -29,7 +29,7 @@ def navigate(page_name):
 def get_random_word(target_length):
     """Loads a word from the JSON file based on the slider length."""
     try:
-        with open("word_bank.json", "r") as file:
+        with open("data/word_bank.json", "r") as file:
             word_bank = json.load(file)
             # Filter words by the requested length
             return random.choice(word_bank[str(target_length)])
