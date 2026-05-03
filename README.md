@@ -2,7 +2,6 @@
 
 ![Python](https://img.shields.io/badge/Python-3.13-blue)
 ![Pytest](https://img.shields.io/badge/Pytest-Testing-green)
-![Coverage](https://img.shields.io/badge/Coverage-Strategic-success)
 ![Streamlit](https://img.shields.io/badge/Streamlit-Web_GUI-red)
 
 A robust, multi-interface implementation of the classic Hangman game. 
@@ -42,13 +41,13 @@ Clone the repository and install the dependencies using your preferred package m
 
 **Using Pip:**
 ```bash
-git clone [https://github.com/luk3pigg/python-hangman-suite.git](https://github.com/luk3pigg/python-hangman-suite.git)
+git clone [https://github.com/luk3pigg/python-hangman-suite.git](https://github.com/luk3pigg/python-hangman-suite)
 cd hangman-suite
 pip install -r requirements.txt
 ```
 **Using Conda:**
 ```bash
-git clone [https://github.com/luk3pigg/python-hangman-suite.git](https://github.com/luk3pigg/python-hangman-suite.git)
+git clone [https://github.com/luk3pigg/python-hangman-suite.git](https://github.com/luk3pigg/python-hangman-suite)
 cd hangman-suite
 conda env create -f environment.yml
 conda activate hangman-env
@@ -62,7 +61,7 @@ python launcher.py
 
 From here, you can choose to launch the Classic Terminal Mode, the Desktop GUI, or the Web App.
 
-## 🧪 Running the Test Suite
+## 🧪 Running the Tests
 This project uses pytest for unit testing. To run the tests and generate an HTML coverage report:
 ```bash
 pytest --cov=. --cov-report=html
