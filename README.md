@@ -7,7 +7,7 @@
 
 A robust, multi-interface implementation of the classic Hangman game. 
 
-Unlike a standard script, this project was built using **professional software engineering principles**, featuring a decoupled architecture, comprehensive test coverage, and a unified launcher that serves the game via Terminal, Desktop GUI, or Web Browser.
+This project was built using **professional software engineering principles**, featuring a decoupled architecture, comprehensive test coverage, and a unified launcher that serves the game via Terminal, Desktop GUI, or Web Browser.
 
 *(Insert a screenshot or GIF of your game running here!)*
 
@@ -42,43 +42,34 @@ Clone the repository and install the dependencies using your preferred package m
 
 **Using Pip:**
 ```bash
-git clone [https://github.com/YOUR_USERNAME/hangman-suite.git](https://github.com/YOUR_USERNAME/hangman-suite.git)
+git clone [https://github.com/luk3pigg/python-hangman-suite.git](https://github.com/luk3pigg/python-hangman-suite.git)
 cd hangman-suite
-pip install -r requirements.txt```
+pip install -r requirements.txt
+```
+**Using Conda:**
+```bash
+git clone [https://github.com/luk3pigg/python-hangman-suite.git](https://github.com/luk3pigg/python-hangman-suite.git)
+cd hangman-suite
+conda env create -f environment.yml
+conda activate hangman-env
+```
+
+### 2. Launching the Suite
+Run the launcher to access the main menu:
+```bash
+python launcher.py
+```
+
+From here, you can choose to launch the Classic Terminal Mode, the Desktop GUI, or the Web App.
+
+## 🧪 Running the Test Suite
+This project uses pytest for unit testing. To run the tests and generate an HTML coverage report:
+```bash
+pytest --cov=. --cov-report=html
+```
+Open htmlcov/index.html in your browser to view the interactive coverage breakdown.
 
 
-old stuff
 
-## 🔗 Repository Link
-[Check out the main project repository here](https://github.com/luk3pigg/python-hangman-game)
 
-## ✨ Features
-* Modular Architecture: Game logic is separated into main.py and game_functions.py for better maintainability.
-* Dynamic Difficulty: Players can select their preferred word length and number of lives to customise difficulty. 
-* Robust Input Validation: Uses try/except blocks to handle invalid inputs without crashing.
-* Game Timer: Tracks exactly how long each successful attempt takes.
 
-## 📂 Project Structure
-* `main.py`: The entry point of the game. Contains the main game loop and user interface logic.
-* `game_functions.py`: The engine containing core logic, word selection, and input validation.
-* `README.md`: Project documentation.
-
-## 🚀 How to Run
-1. Clone the repository:
-```git clone https://github.com/luk3pigg/python-hangman-game```
-
-2. Run the game in your preferred IDE: ```main.py```
-
-## 📖 How to Play
-* **OBJECTIVE**: guess the secret word by guessing the letters it contains.
-* Choose how many lives you have, and the length of the secret word.
-* If your letter guess is in the secret word, its location/s in the secret word will be revealed.
-* But be careful: if your letter guess is not in the secret word, you will lose a life.
-* You win the game if you guess all the letters and hence the word without losing all your lives!
-
-## 🛠️ Built With
-* Python
-* Spyder IDE
-* Git/GitHub for version control
-
-Last updated: 09/03/26
