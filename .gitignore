@@ -19,3 +19,6 @@ env/
 *.log
 *.csv
 *.xlsx
+
+.coverage
+htmlcov/
