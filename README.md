@@ -6,39 +6,30 @@
 
 A robust, multi-interface implementation of the classic Hangman game. 
 
-This project was built using **professional software engineering principles**, featuring a decoupled architecture, allowing the game to be launched via Terminal, Desktop GUI, or Web Browser. The code was also unit tested using Pytest. 
+This project was built using **professional software engineering principles**, featuring a decoupled architecture, unit testing using Pytest, and multiple interfaces to run the game engine on.  
 
 *(Insert a screenshot or GIF of your game running here!)*
 
-## ✨ Key Engineering Highlights
-*   **Separation of Concerns:** Core game engine (`logic.py`) is completely decoupled from the User Interface (`terminal_main.py`) and entry point (`launcher.py`).
-*   **Multi-Interface Ready:** Because the logic is decoupled, the same engine seamlessly powers a Terminal, Desktop, and Web app.
-*   **Robust Testing:** Features automated unit and integration tests using `pytest` and `monkeypatch` to simulate user I/O.
-*   **Environment Management:** Includes both `requirements.txt` (Pip) and `environment.yml` (Conda) for zero-friction local installation.
+---
 
-## 🎮 Core Features
-*   **Customizable Difficulty:** Players can tailor the challenge by adjusting the length of the secret word and their starting number of lives.
-*   **Intelligent Session Tracking:** The engine records performance across multiple rounds, calculating win percentages and average time-to-win.
-*   **Bulletproof Input Handling:** Built-in safeguards catch typos, duplicate letter guesses, and invalid symbols, gracefully prompting the user without crashing the application.
-*   **Multi-Interface Support:** Play via the classic Terminal, or test the underlying engine using the Desktop GUI or Web App. 
-
-> **⚠️ Note on GUI & Web Apps:** The Desktop GUI and Streamlit Web App are currently included as *Proof of Concepts (Beta)*. Their primary purpose is to demonstrate the extensibility of the decoupled `logic.py` engine, proving the core math can be seamlessly ported to different frontend frameworks without rewriting the rules of the game.
+Please read **[`project_writeup.md`](project_writeup.md)** for a deeper analysis of this project.
 
 ---
 
-## 🏗️ Architecture & Engineering Decisions
 
-### 1. Separation of Concerns (The Restaurant Analogy)
-To ensure the codebase remained scalable and testable, the code is heavily modularized:
-*   **The Chef (`logic.py`):** The core engine. It handles all mathematical states, win/loss conditions, and memory. It contains zero UI logic and is completely "blind" to how the user is playing.
-*   **The Waiter (`terminal_utils.py`):** The UI layer. It exclusively handles formatting text, clearing screens, and trapping invalid user inputs in safety loops.
-*   **The General Manager (`terminal_main.py`):** The orchestrator. It manages the high-level game phases, loading the JSON word bank, and passing data between the UI and the Engine.
+## ✨ Key Engineering Highlights 
+*   **Object-Oriented Programming:** Encapsulated game states, such as remaining lives and guessed letters, into manageable and testable objects. 
+*   **Decoupled Architecture:** Separated the game engine (`logic.py`) to facilitate development of multiple independent user interfaces. The user selects their mode in(`launcher.py`).
+*   **Robust Testing:** Features unit tests on the logic using `pytest` with 91% coverage. Used `monkeypatch` to simulate user I/O to test the terminal interface.
+*   **Learning Journey:** Included initial function-based version (v1) of the game to benchmark progress.
 
-### 2. Strategic Test Coverage
-If you review the test suite, you will notice `logic.py` has near-perfect coverage, while `terminal_utils.py` coverage is deliberately lower (around ~31%). 
+> **⚠️ Note on GUI & Web Apps:** The Desktop GUI and Streamlit Web App are currently included as *Proof of Concepts (Beta)*. Their primary purpose is to demonstrate the extensibility of the decoupled `logic.py` engine.
 
-This split is entirely by design: **prioritizing business logic over I/O side effects.**
-Automating tests for `print()` statements and `time.sleep()` offers zero Return on Investment. The test suite aggressively targets the isolated mathematical engine, state memory, and complex user-input validation (using `monkeypatch`), demonstrating a pragmatic approach to QA rather than chasing vanity metrics.
+## 🎮 Game Features
+*   **Customisable Difficulty:** Players can choose the length of the secret word and their starting number of lives.
+*   **Intelligent Game Tracking:** If a game is won, the engine records the time taken to guess the secret word, the average winning time of all games played by the user, and a bonus message if the game was their quickest winning time yet.
+*   **Intelligent Session Tracking:** The engine records the total playing duration, the number of wins in the session, and the % win rate.
+*   **Robust Input Handling:** Built-in safeguards to catch typos, duplicate letter guesses, and invalid symbols, prompting the user without crashing the application.
 
 ---
 
@@ -64,10 +55,19 @@ conda activate hangman-env
 ### 2. Launching the Suite
 Run the launcher to access the main menu:
 ```bash
+cd hangman_v2_oop/
 python launcher.py
 ```
 
 From here, you can choose to launch the Classic Terminal Mode, the Desktop GUI, or the Web App.
+
+### 🕰️Exploring function-based version (v1)
+To demonstrate the evolution of this project, the initial version has been preserved. It can be run as follows:
+```bash
+cd hangman_v1_functional/
+python main.py
+```
+---
 
 ## 🧪 Running the Tests
 This project uses pytest for unit testing. To run the tests and generate an HTML coverage report:
