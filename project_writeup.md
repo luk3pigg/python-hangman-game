@@ -1,12 +1,15 @@
 # Python Hangman Suite - Project Write-Up
 
-## 1. Overview
-*A brief summary of what the project is, the core technologies used, and your biggest wins (e.g., achieving 91% coverage on the logic engine, successfully porting the game to Streamlit).*
+## Table of Contents
+* [1. Project Overview](#project-overview)
+* [2. Concepts and Highlights](#2-concepts-and-highlights)
+
+## Project Overview
+
+The aim of this project was to incorporate the fundamental programming concepts that I have learnt to build a functioning, interactive Python application with a decoupled logic backend and user interface. I achieved this by initially building a simple hangman game based on functions. I continuously increased its complexity by implementing production-level techniques such as robust error handling, Object-oriented Programming, and comprehensive unit testing. Ultimately, I engineered a decoupled core logic engine capable of running seamlessly across multiple interfaces. By documenting the complete software development lifecycle, this project serves as a foundational blueprint and standard for my future programming and engineering work. 
 
 
-
-
-## 2. Core Engineering Concepts
+## 2. Concepts and Highlights
 *This is where you define the theory before showing the code.*
 *   **Modularization:** Explain why breaking the monolith apart was crucial.
 *   **Separation of Concerns & Decoupled Architecture:** Use the "Restaurant/Chef" analogy here to explain how the math engine is completely blind to the UI.

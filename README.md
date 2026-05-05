@@ -1,4 +1,4 @@
-# 🎮 Hangman Suite: A Multi-Interface Python Application
+# 🎮 Hangman Suite: A Multi-Interface Python Game
 
 ![Python](https://img.shields.io/badge/Python-3.13-blue)
 ![Pytest](https://img.shields.io/badge/Pytest-Testing-green)
@@ -13,8 +13,8 @@ This project was built using **professional software engineering principles**, f
 ---
 
 ## ✨ Key Engineering Highlights 
-*   **Object-Oriented Programming:** Encapsulated game states, such as remaining lives and guessed letters, into manageable and testable objects. 
-*   **Decoupled Architecture:** Separated the game engine (`logic.py`) to facilitate development of multiple independent user interfaces. The user selects their mode in(`launcher.py`).
+*   **Object-oriented Programming:** Encapsulated game states, such as remaining lives and guessed letters, into manageable and testable objects. 
+*   **Decoupled Architecture:** Separated the game engine (`logic.py`) to facilitate development of multiple independent user interfaces. The user selects their mode in `launcher.py`.
 *   **Robust Testing:** Features unit tests on the logic using `pytest` with 91% coverage. Used `monkeypatch` to simulate user I/O to test the terminal interface.
 *   **Learning Journey:** Included initial function-based version (v1) of the game to benchmark progress.
 
