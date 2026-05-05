@@ -1,7 +1,10 @@
-# Building the Hangman Suite: A Case Study in Decoupled Architecture
+# Python Hangman Suite - Project Write-Up
 
-## 1. Overview and Highlights
+## 1. Overview
 *A brief summary of what the project is, the core technologies used, and your biggest wins (e.g., achieving 91% coverage on the logic engine, successfully porting the game to Streamlit).*
+
+
+
 
 ## 2. Core Engineering Concepts
 *This is where you define the theory before showing the code.*
@@ -43,3 +46,20 @@ Mention adding a database (SQLite/PostgreSQL) for persistent SessionStats.
 Mention integrating a live Dictionary API to replace the static JSON file.
 Since we already have the concepts (like decoupling and testing strategy) fresh in our minds, **which section of this write-up would you like to draft first?** We can start with the "Overview of Concepts" and get those engineering definitions locked in, or we can pick the best code snippets for section 4.
 
+---
+
+## 🏗️ Architecture & Engineering Decisions
+
+### 1. Separation of Concerns (The Restaurant Analogy)
+To ensure the codebase remained scalable and testable, the code is heavily modularized:
+*   **The Chef (`logic.py`):** The core engine. It handles all mathematical states, win/loss conditions, and memory. It contains zero UI logic and is completely "blind" to how the user is playing.
+*   **The Waiter (`terminal_utils.py`):** The UI layer. It exclusively handles formatting text, clearing screens, and trapping invalid user inputs in safety loops.
+*   **The General Manager (`terminal_main.py`):** The orchestrator. It manages the high-level game phases, loading the JSON word bank, and passing data between the UI and the Engine.
+
+### 2. Strategic Test Coverage
+If you review the test suite, you will notice `logic.py` has near-perfect coverage, while `terminal_utils.py` coverage is deliberately lower (around ~31%). 
+
+This split is entirely by design: **prioritizing business logic over I/O side effects.**
+Automating tests for `print()` statements and `time.sleep()` offers zero Return on Investment. The test suite aggressively targets the isolated mathematical engine, state memory, and complex user-input validation (using `monkeypatch`), demonstrating a pragmatic approach to QA rather than chasing vanity metrics.
+
+---

@@ -12,24 +12,21 @@ This project was built using **professional software engineering principles**, f
 
 ---
 
-Please read **[`project_writeup.md`](project_writeup.md)** for a deeper analysis of this project.
-
----
-
-
 ## ✨ Key Engineering Highlights 
 *   **Object-Oriented Programming:** Encapsulated game states, such as remaining lives and guessed letters, into manageable and testable objects. 
 *   **Decoupled Architecture:** Separated the game engine (`logic.py`) to facilitate development of multiple independent user interfaces. The user selects their mode in(`launcher.py`).
 *   **Robust Testing:** Features unit tests on the logic using `pytest` with 91% coverage. Used `monkeypatch` to simulate user I/O to test the terminal interface.
 *   **Learning Journey:** Included initial function-based version (v1) of the game to benchmark progress.
 
-> **⚠️ Note on GUI & Web Apps:** The Desktop GUI and Streamlit Web App are currently included as *Proof of Concepts (Beta)*. Their primary purpose is to demonstrate the extensibility of the decoupled `logic.py` engine.
+> **⚠️ Note on GUI & Web App:** The Desktop GUI and Streamlit Web App are currently included as *Proof of Concepts (Beta)*. Their primary purpose is to demonstrate the extensibility of the decoupled `logic.py` engine.
 
 ## 🎮 Game Features
 *   **Customisable Difficulty:** Players can choose the length of the secret word and their starting number of lives.
 *   **Intelligent Game Tracking:** If a game is won, the engine records the time taken to guess the secret word, the average winning time of all games played by the user, and a bonus message if the game was their quickest winning time yet.
 *   **Intelligent Session Tracking:** The engine records the total playing duration, the number of wins in the session, and the % win rate.
 *   **Robust Input Handling:** Built-in safeguards to catch typos, duplicate letter guesses, and invalid symbols, prompting the user without crashing the application.
+
+Please read **[`project_writeup.md`](project_writeup.md)** for a deeper analysis of this project.
 
 ---
 
