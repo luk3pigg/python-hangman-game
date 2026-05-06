@@ -1,25 +1,25 @@
 # Python Hangman Suite - Project Write-Up
 
 ## Table of Contents
-* [Project Overview](#project-overview)
-* [Key Concepts](#key-concepts)
-* [Planning, Implementation, and Evolution](#planning-implementation-and-evolution)
-    * [Planning](#planning)
-    * [Implementation](#implementation)
-    * [Evolution](#evolution)
-* [Testing Strategy](#testing-strategy)
-* [Code Highlights](#code-highlights)
-    * [Decoupled Logic and Encapsulation](#decoupled-logic-and-encapsulation)
-    * [Defensive UI Programming Using Robust Input Validation](#defensive-ui-programming-using-robust-input-validation)
-    * [Simulating User I/O with pyest Mocking](#simulating-user-io-with-pytest-mocking)
-* [Key Lessons and Future Work](#key-lessons-and-future-work)
+* [1. Project Overview](#1-project-overview)
+* [2. Key Concepts](#2-key-concepts)
+* [3. Planning, Implementation, and Evolution](#3-planning-implementation-and-evolution)
+    * [3.1 Planning](#31-planning)
+    * [3.2 Implementation](#32-implementation)
+    * [3.3 Evolution](#33-evolution)
+* [4. Testing Strategy](#4-testing-strategy)
+* [5. Code Highlights](#5-code-highlights)
+    * [5.1 Decoupled Logic and Encapsulation](#51-decoupled-logic-and-encapsulation)
+    * [5.2 Defensive UI Programming Using Robust Input Validation](#52-defensive-ui-programming-using-robust-input-validation)
+    * [5.3 Simulating User I/O with pyest Mocking](#53-simulating-user-io-with-pytest-mocking)
+* [6. Key Lessons and Future Work](#6-key-lessons-and-future-work)
 
 
-## Project Overview
+## 1. Project Overview
 
 The aim of this project was to incorporate the fundamental programming concepts that I have learnt to build a functioning, interactive Python application with a decoupled logic backend and user interface. I achieved this by initially building a simple functions-based hangman game. I continuously increased its complexity by implementing production-level techniques such as robust error handling, Object-oriented Programming, and comprehensive unit testing. Ultimately, I engineered a decoupled core logic engine capable of running seamlessly across multiple interfaces. By documenting the complete software development lifecycle, this project serves as a foundational blueprint and standard for my future programming and engineering work. 
 
-## Key Concepts 
+## 2. Key Concepts 
 
 To transition this project from a basic script to a production-ready application, I designed the architecture around three core software engineering principles:
 
@@ -27,15 +27,15 @@ To transition this project from a basic script to a production-ready application
 *   **Decoupled Architecture:** Separating the logic/data layer from the User Interface (UI) to ensure the application appearance can be changed without breaking its functionality.
 *   **State Management (OOP):** In complex, state-heavy applications, constantly passing loose variables between functions can be a major source of bugs and data corruption. Encapsulation solves this by bundling together the data and the functions permitted to modify them into a single 'Object'. In this project, I create `HangmanGame` and `SessionStats` classes to manage the game's state, resulting in cleaner, safer, and highly testable architecture. 
 
-## Planning, Implementation, and Evolution
+## 3. Planning, Implementation, and Evolution
 
 The development of the Hangman Suite followed a structured, iterative lifecycle. My priority was to ensure that the core logic was fully validated before introducing complex architectural patterns.
 
-### Planning
+### 3.1 Planning
 
 Before writing a single line of executable Python, I mapped out a game loop for a Minimal Viable Product (MVP) using pseudocode written with comments. This allowed me to focus purely on the logic, without getting distracted by syntax or overwhelmed by different features I could add (e.g. anything UX related).
 
-### Implementation
+### 3.2 Implementation
 
 To build a functioning prototype, I intentionally kept the scope narrow:
 *   **Static Data:** I started with a single, hardcoded secret word rather than a dictionary.
@@ -53,7 +53,7 @@ Next, I began improving the efficiency, maintainability, and robustness of my co
 
 This iterative approach of building a prototype and then refactoring it into isolated modules ensured that my architectural changes never broke the underlying logic, resulting in a highly stable program. This culminated in my first fully-functioning version 1 (instructions on how to run this version are in the **[`README.md`](README.md)**). 
 
-### Evolution
+### 3.3 Evolution
 
 With version 1 working perfectly, it was time to refactor the code into a production-grade application.
 
@@ -63,7 +63,7 @@ With version 1 working perfectly, it was time to refactor the code into a produc
 
 These edits culminated in version 2 of my code.
 
-## Testing Strategy
+## 4. Testing Strategy
 
 Testing `logic.py` was crucial to ensure the engine was working before building additional user interfaces. I then focused on high-value unit tests for `terminal_utils.py`. 
 
@@ -76,15 +76,15 @@ Testing the rules of the game was streamlined due to my use of Object-Oriented P
 Testing the logic in the terminal UI presented an engineering challenge: functions using Python's built-in `input()` command will permanently pause an automated test suite while waiting for a human to type on the keyboard. To solve this, I used `pytest`'s built-in `monkeypatch` feature. This allowed me to simulate a user typing numbers, special symbols, and duplicate letters, verifying that my error-handling loops correctly trapped invalid data and prompted the user again, all without ever freezing the test suite. I decided to write tests exclusively for these error-handling loops, resulting in a targeted **30% test coverage**. The remaining untested lines were either built-in functions or code that relied on `logic.py`, which had already been tested.
 
 
-## Code Highlights 
+## 5. Code Highlights 
 
-### Decoupled Logic and Encapsulation
+### 5.1 Decoupled Logic and Encapsulation
 
 The most significant architectural improvement in this project was migrating the core game loop from functional programming to an Object-oriented approach. 
 
-In my initial version (V1), tracking the game state required passing multiple loose variables in and out of every single function, which was prone to data corruption and difficult to test. Furthermore, core logic was entangled with the user interface via hardcoded `print()` statements:
+In my initial version (`hangman_v1_functional/`), tracking the game state required passing multiple loose variables in and out of every single function, which was prone to data corruption and difficult to test. Furthermore, core logic was entangled with the user interface via hardcoded `print()` statements:
 
-**Before: The Functional Approach (V1)**
+**Before: The Functional Approach (`hangman_v1_functional/`)**
 
 *File: `hangman_v1_functional/main.py`*
 
@@ -162,7 +162,7 @@ Notice how the engine object is instantiated in the main setup file, but the act
 game = HangmanGame(chosen_word=chosen_word, starting_lives=lives) #instantiating the object
 ```
 
-**After: The OOP Approach (V2)**
+**After: The OOP Approach (`hangman_v2_oop/`)**
 
 *File: `hangman_v2_oop/terminal_utils.py`*
 ```python
@@ -179,7 +179,7 @@ if is_correct:
             time.sleep(1.0)
 ```
 
-### Defensive UI Programming Using Robust Input Validation
+### 5.2 Defensive UI Programming Using Robust Input Validation
 
 Because the core logic engine expects clean data, the interface layer must act as a filter. To eliminate redundant code and prevent edge-case crashes, I engineered a "dynamic prompting" pattern for all `while` loops that handle user I/O. 
 
@@ -252,7 +252,7 @@ def get_letter_guess(game):
 
 ```
 
-### Simulating User I/O with pytest Mocking
+### 5.3 Simulating User I/O with pytest Mocking
 
 As discussed in the Testing Strategies section, any function containing `input()` commands will permanently pause an automated test suite.
 
@@ -284,18 +284,18 @@ def test_input_within_range_recovers_from_errors(monkeypatch):
 
 ---
 
-## Key Lessons and Future Work
+## 6. Key Lessons and Future Work
 
 Building the Hangman Suite was a pivotal step in transitioning from simply writing code to engineering software. It reinforced the importance of planning, architecture, and quality assurance. Below are just some of the key lessons I learnt and my ideas for future work. 
 
-### 6.1 Key Engineering Takeaways
+### Key Engineering Takeaways
 
 *   **The Software Development Life Cycle (SDLC):** This project bridged the gap between being an intermediate coder and a systems thinker. By adhering to a SDLC (planning with pseudocode, building a Minimum Viable Product (MVP), and systematically refactoring), I learned how to build a comprehensive suite using professional conventions rather than just brain-dumping a monolithic script.
 *   **The Strength of Decoupled Architecture:** Forcing my game engine to be completely "blind" to the user interface was a challenging but rewarding part of this project. It taught me how separating concerns makes a codebase much more scalable e.g. by introducing different user interfaces.
-*   **The Value of Proof of Concepts (PoC):** I learned that building an initial functions-based prototype (V1) was not a waste of time, rather serving as a vital PoC that validated the core logic. My desktop GUI and web app PoCs also justified my architectural decisions made throughout, demonstrating the scalability of this project.
+*   **The Value of Proof of Concepts (PoC):** I learned that building an initial functions-based prototype (`hangman_v1_functional/`) was not a waste of time, rather serving as a vital PoC that validated the core logic. My desktop GUI and web app PoCs also justified my architectural decisions made throughout, demonstrating the scalability of this project.
 *   **Context-Dependent User Experience (UX):** Expanding the game to three distinct interfaces taught me that UX strategies are not one-size-fits-all. A terminal requires dynamic prompting and OS-level screen clearing, whereas a web application requires navigation through different screens and aesthetic visual feedback.
 
-### 6.2 Future Roadmap
+### Future Roadmap
 
 While the core suite is highly stable, the decoupled architecture leaves the door open for several exciting expansions:
 *   **API Integration:** I plan to replace the static `word_bank.json` file with a live web API. This will provide a much larger word bank without increasing the repository size, and will allow the game to fetch real-time definitions to present to the user upon game completion.

@@ -18,7 +18,7 @@ This project was built using **professional software engineering principles**, f
 *   **Object-oriented Programming:** Encapsulated game states, such as remaining lives and guessed letters, into manageable and testable objects. 
 *   **Decoupled Architecture:** Separated the game engine (`logic.py`) to facilitate development of multiple independent user interfaces. The user selects their mode in `launcher.py`.
 *   **Robust Testing:** Features unit tests on the logic using `pytest` with 91% coverage. Used `monkeypatch` to simulate user I/O to test the terminal interface.
-*   **Learning Journey:** Included initial function-based version (v1) of the game to benchmark progress.
+*   **Learning Journey:** Included initial function-based version of the game (`hangman_v1_functional/`) to benchmark progress.
 
 > **⚠️ Note on GUI & Web App:** The Desktop GUI and Streamlit Web App are currently included as *Proof of Concepts (Beta)*. Their primary purpose is to demonstrate the extensibility of the decoupled `logic.py` engine.
 
@@ -60,7 +60,7 @@ python launcher.py
 
 From here, you can choose to launch the Classic Terminal Mode, the Desktop GUI, or the Web App.
 
-### 🕰️Exploring function-based version (v1)
+### 🕰️Exploring function-based version (`hangman_v1_functional/`)
 To demonstrate the evolution of this project, the initial version has been preserved. It can be run as follows:
 ```bash
 cd hangman_v1_functional/
