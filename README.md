@@ -4,9 +4,7 @@
 ![Pytest](https://img.shields.io/badge/Pytest-Testing-green)
 ![Streamlit](https://img.shields.io/badge/Streamlit-Web_GUI-red)
 
-A robust, multi-interface implementation of the classic Hangman game. 
-
-This project was built using **professional software engineering principles**, featuring a decoupled architecture, unit testing using Pytest, and multiple interfaces to run the game engine on.  
+An advanced Python Hangman suite demonstrating the Software Development Life Cycle. A single, heavily-tested OOP logic engine deployed across three distinct user interfaces.
 
 
 ![Hangman Gameplay Demo](hangman_v2_oop/assets/demo.gif)

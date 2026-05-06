@@ -90,7 +90,13 @@ In my initial version (`hangman_v1_functional/`), tracking the game state requir
 
 ```python
 # State relies on loose variables passed back and forth
-lives, correct_guesses, game_won = gf.guess_result(guessed_letters=guessed_letters, chosen_word=chosen_word, display_word=display_word, letter_guess=letter_guess, lives=lives, correct_guesses=correct_guesses, game_won=game_won)  
+lives, correct_guesses, game_won = gf.guess_result(guessed_letters=guessed_letters, 
+                                                    chosen_word=chosen_word, 
+                                                    display_word=display_word, 
+                                                    letter_guess=letter_guess, 
+                                                    lives=lives, 
+                                                    correct_guesses=correct_guesses, 
+                                                    game_won=game_won)  
             
 # --- Turn Feedback ---
 if letter_guess in chosen_word:
@@ -213,10 +219,12 @@ def input_within_range(lower, upper, prompt, subject):
                 return user_input 
             else:
                 # Dynamically update the prompt with a contextual out-of-bounds error
-                prompt = (f"\n[!] That is not within the specified range for the {subject}. Please enter a number between {lower} and {upper} inclusive.\n> ")
+                prompt = (f"\n[!] That is not within the specified range for the {subject}. 
+                Please enter a number between {lower} and {upper} inclusive.\n> ")
         except ValueError:
             # Dynamically update the prompt with a type error message
-            prompt = (f"\n[!] That is not a valid number. Please enter a valid {subject} between {lower} and {upper} inclusive.\n> ")
+            prompt = (f"\n[!] That is not a valid number. 
+            Please enter a valid {subject} between {lower} and {upper} inclusive.\n> ")
 ```
 
 **Example 2: Delegating Validation Logic**
