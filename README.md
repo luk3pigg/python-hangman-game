@@ -8,7 +8,9 @@ A robust, multi-interface implementation of the classic Hangman game.
 
 This project was built using **professional software engineering principles**, featuring a decoupled architecture, unit testing using Pytest, and multiple interfaces to run the game engine on.  
 
-*(Insert a screenshot or GIF of your game running here!)*
+
+![Hangman Gameplay Demo](hangman_v2_oop/assets/demo.gif)
+
 
 ---
 
@@ -26,7 +28,7 @@ This project was built using **professional software engineering principles**, f
 *   **Intelligent Session Tracking:** The engine records the total playing duration, the number of wins in the session, and the % win rate.
 *   **Robust Input Handling:** Built-in safeguards to catch typos, duplicate letter guesses, and invalid symbols, prompting the user without crashing the application.
 
-Please read **[`project_writeup.md`](project_writeup.md)** for a deeper analysis of this project.
+Please read **[`project_writeup.md`](project_writeup.md)** for an in-depth discussion about this project.
 
 ---
 
@@ -76,10 +78,12 @@ Open htmlcov/index.html in your browser to view the interactive coverage breakdo
 ---
 
 ## 🗺️ Future Roadmap
-While the core engine is feature-complete and fully tested, there is always room for expansion. Future updates to this suite may include:
-*   **Persistent Database:** Transitioning from temporary `SessionStats` to an SQLite or PostgreSQL database to track global high scores and player history across reboots.
-*   **Dynamic Word Fetching:** Integrating a public Dictionary API to pull words and definitions dynamically, replacing the static `word_bank.json` file.
-*   **Interface Feature Parity:** Upgrading the Beta GUI and Web App to have full feature parity with the heavily polished Terminal experience.
 
+While the core engine is fully stable, I have several planned features to expand the suite:
+
+* **Live API Integration:** Transitioning from a static local dictionary to an API to provide an larger word bank and real-time definitions.
+* **Weighted Scoring System:** Introducing a competitive scoring metric based on word length and lives preserved.
+* **Persistent Leaderboards:** Integrating a relational database (SQLite/PostgreSQL) to save player profiles and track historical win rates across multiple sessions.
+* **Graphical State Rendering:** Enhancing the GUI and Web interfaces with visual Hangman diagrams that dynamically update based on the core game state.
 
 
